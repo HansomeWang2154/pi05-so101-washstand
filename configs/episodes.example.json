@@ -1,0 +1,6 @@
+[
+  {"episode_id": 0, "session_id": "example_session_a", "layout_id": "example_layout_a", "task_id": "red_left"},
+  {"episode_id": 1, "session_id": "example_session_a", "layout_id": "example_layout_a", "task_id": "red_right"},
+  {"episode_id": 2, "session_id": "example_session_b", "layout_id": "example_layout_b", "task_id": "blue_left"},
+  {"episode_id": 3, "session_id": "example_session_b", "layout_id": "example_layout_b", "task_id": "blue_right"}
+]

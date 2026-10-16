@@ -1,0 +1,9 @@
+{
+  "robot": {"port": null, "leader_port": null},
+  "cameras": {
+    "top": {"index_or_path": null},
+    "wrist": {"index_or_path": null}
+  },
+  "data": {"repo_id": null},
+  "deployment": {"checkpoint": null, "server_address": "127.0.0.1:8080"}
+}

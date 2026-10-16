@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "pi05-so101-washstand",
+    "start_date": "2026-10-16",
+    "timezone": "Asia/Shanghai"
+  },
+  "runtime": {
+    "lerobot_source": null,
+    "lerobot_commit_candidate": "d6039b8376a3ee099a6f0f64c1bb8599ca743ae3",
+    "environment_verified": false
+  },
+  "robot": {
+    "type": "so101_follower",
+    "id": "washstand_follower",
+    "port": null,
+    "leader_type": "so101_leader",
+    "leader_id": "washstand_leader",
+    "leader_port": null,
+    "use_degrees": true,
+    "calibration_verified": false,
+    "action_contract_verified": false,
+    "max_relative_target": null,
+    "joint_names": [
+      "shoulder_pan.pos",
+      "shoulder_lift.pos",
+      "elbow_flex.pos",
+      "wrist_flex.pos",
+      "wrist_roll.pos",
+      "gripper.pos"
+    ]
+  },
+  "cameras": {
+    "top": {
+      "type": "opencv",
+      "index_or_path": null,
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    },
+    "wrist": {
+      "type": "opencv",
+      "index_or_path": null,
+      "width": 640,
+      "height": 480,
+      "fps": 30
+    }
+  },
+  "data": {
+    "root": "data/real/washstand_v1",
+    "repo_id": null,
+    "fps": 30,
+    "video_backend": "pyav",
+    "split_path": null,
+    "train_statistics_verified": false,
+    "episodes_per_record": 5,
+    "episode_time_s": 45,
+    "reset_time_s": 15
+  },
+  "tasks": {
+    "red_left": "Put the red toothbrush into the left cup.",
+    "red_right": "Put the red toothbrush into the right cup.",
+    "blue_left": "Put the blue toothbrush into the left cup.",
+    "blue_right": "Put the blue toothbrush into the right cup."
+  },
+  "policy": {
+    "type": "pi05",
+    "pretrained_path": "lerobot/pi05_base",
+    "dtype": "bfloat16",
+    "action_dim": 6,
+    "state_dim": 6,
+    "chunk_size": 50,
+    "n_action_steps": 10,
+    "num_inference_steps": 10,
+    "train_expert_only": true,
+    "freeze_vision_encoder": true,
+    "gradient_checkpointing": true
+  },
+  "training": {
+    "batch_size": 16,
+    "steps": 5000,
+    "num_workers": 4,
+    "seed": 1000,
+    "save_freq": 1000,
+    "log_freq": 100,
+    "output_dir": "outputs/train/pi05_real_v1"
+  },
+  "deployment": {
+    "checkpoint": null,
+    "server_host": "127.0.0.1",
+    "server_port": 8080,
+    "server_address": "127.0.0.1:8080",
+    "policy_device": "cuda",
+    "actions_per_chunk": 50,
+    "chunk_size_threshold": 0.5
+  },
+  "simulation": {
+    "enabled": false,
+    "backend": "mujoco",
+    "local_exploration_hours_cap": 8,
+    "training_source_real_probability": 0.5,
+    "data_contract_verified": false
+  }
+}

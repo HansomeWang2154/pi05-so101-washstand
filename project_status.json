@@ -1,0 +1,89 @@
+{
+  "updated_date": "2026-10-16",
+  "current_phase": "G0_hardware_environment_verification",
+  "issue_log": "docs/问题记录.md",
+  "simulation_design_doc": "docs/仿真环境与专家数据生成方案.md",
+  "version_control": {
+    "system": "git",
+    "default_branch": "main",
+    "remote_configured": false,
+    "workflow_doc": "docs/Git版本管理.md"
+  },
+  "active_hours_recorded": null,
+  "gpu_hours_recorded": 0,
+  "stages": {
+    "I0": {
+      "status": "completed",
+      "description": "项目代码、配置、工具和文档初始化；26项离线测试通过",
+      "evidence": [
+        "environment/bootstrap-summary.json",
+        "environment/doctor.local.json",
+        "environment/video-smoke.local.json"
+      ]
+    },
+    "G0": {
+      "status": "pending",
+      "description": "硬件、环境、数据契约实际验证"
+    },
+    "G1": {
+      "status": "pending",
+      "description": "真机试采与数据检查"
+    },
+    "G2": {
+      "status": "pending",
+      "description": "小数据训练、保存重载、云端推理与本地执行"
+    },
+    "G3": {
+      "status": "pending",
+      "description": "正式数据版本"
+    },
+    "G4": {
+      "status": "pending",
+      "description": "主模型微调与选择"
+    },
+    "G5": {
+      "status": "pending",
+      "description": "执行调试与一次修正"
+    },
+    "G6": {
+      "status": "pending",
+      "description": "主模型40次正式真机测试"
+    },
+    "G7": {
+      "status": "pending",
+      "description": "复现、报告、视频与复现材料"
+    },
+    "S_optional": {
+      "status": "not_started",
+      "description": "环境与专家数据生成设计已整理；实现未开始，主线节余才启动",
+      "design_evidence": [
+        "docs/仿真环境与专家数据生成方案.md"
+      ]
+    }
+  },
+  "confirmed_hardware": [
+    "SO101 leader",
+    "SO101 follower",
+    "top camera",
+    "wrist camera",
+    "4060 Laptop 8188MB",
+    "rental A800 80GB",
+    "rental RTX4090"
+  ],
+  "next_actions": [
+    "确认实际串口与top/wrist相机编号",
+    "验证相机画面和校准",
+    "做人工遥操作可行性检查",
+    "录制10到20条试采并检查"
+  ],
+  "unverified": [
+    "robot calibration",
+    "camera capture",
+    "state/action units",
+    "Torch CUDA execution",
+    "cloud environment",
+    "pi05 checkpoint loading",
+    "training",
+    "real-world success"
+  ]
+}

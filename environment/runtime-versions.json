@@ -1,0 +1,21 @@
+{
+  "recorded_date": "2026-10-16",
+  "python_version": "3.12.14",
+  "package_metadata_versions": {
+    "lerobot": "0.6.2",
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "transformers": "5.5.4",
+    "mujoco": "3.8.1",
+    "numpy": "2.2.6",
+    "pyarrow": "25.0.1",
+    "av": "15.1.0",
+    "grpcio": "1.84.0"
+  },
+  "lerobot_commit_candidate": "d6039b8376a3ee099a6f0f64c1bb8599ca743ae3",
+  "notes": [
+    "Selected metadata from the local initialization report; not a full dependency lock.",
+    "The local venv reuses an existing environment and cannot be copied as a standalone cloud runtime.",
+    "CLI import and synthetic PyAV checks passed; CUDA, model and hardware execution remain unverified."
+  ]
+}

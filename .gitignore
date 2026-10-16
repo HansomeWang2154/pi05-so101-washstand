@@ -1,0 +1,57 @@
+# 本机配置与凭据
+.env
+.env.*
+!.env.example
+configs/local.json
+.ssh/
+*.pem
+*.key
+
+# Python 环境、缓存和构建产物
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# 数据、模型与运行产物
+data/
+datasets/
+checkpoints/
+outputs/
+cache/
+runs/
+wandb/
+logs/
+*.log
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+pytorch_model*.bin
+*.mp4
+*.avi
+*.zip
+
+# 本机详细检查输出；共享版本和验收摘要另行归档
+/environment/*.local.json
+/environment/*.local.txt
+/environment/*-help*.txt
+/environment/*preview*.json
+
+# 编辑器临时文件
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store

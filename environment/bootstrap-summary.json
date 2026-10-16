@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-16",
+  "stage": "I0",
+  "status": "completed",
+  "tests_passed": 26,
+  "config_structure": "valid; device/data values pending",
+  "doc_links": "checked",
+  "pyav_synthetic_smoke": "passed, four H264 frames",
+  "lerobot_cli_help": "passed with TorchCodec warning",
+  "git_initialized": true,
+  "hardware_executed": false,
+  "cloud_started": false,
+  "model_loaded": false,
+  "next_stage": "G0"
+}
