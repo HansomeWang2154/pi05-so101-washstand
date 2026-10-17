@@ -49,7 +49,8 @@
         "Rerun JPEG显示路径最小对照可触发卡住；关闭显示压缩的保存真实双图和目标30Hz/300次回放（总耗时11.00秒含结束等待），两次窗口截图响应通过；不是真实相机帧率或机械臂运行验证",
         "22:05重接后四节点存在；旧会话串口无rw，账户仍含dialout；使用已有组的临时子进程仅CHECK_ONLY退出0，未改ACL/权限或打开硬件",
         "用户新日志确认关闭显示压缩下四设备连接并控制256.5秒/29.90Hz；用户确认双画面和窗口正常；本轮退出失败且真实相机新帧率未测",
-        "退出补丁在副本和已应用运行时各通过16项纯内存故障注入；保留已有ACT改动，没有设备访问；实际退出卸力未验证"
+        "退出补丁在副本和已应用运行时各通过16项纯内存故障注入；保留已有ACT改动，没有设备访问；实际退出卸力未验证",
+        "录制入口0002独立清理补丁已应用，11项纯内存故障注入通过；ACT与0001保持，未接设备，真实收尾未验"
       ],
       "rerun_debug_report": "docs/Rerun无响应调试报告_2026-10-17.md",
       "shutdown_cleanup_evidence": "environment/shutdown-cleanup-summary.json",
@@ -57,7 +58,11 @@
     },
     "G1": {
       "status": "pending",
-      "description": "真机试采与数据检查"
+      "description": "真机试采与数据检查",
+      "preparation_status": "已按用户任务准备red_left单条启动器，完整参数解析及元数据check-only通过；未启动录制、未采真实episode",
+      "preparation_evidence": "environment/record-one-preparation-summary.json",
+      "operation_guide": "docs/单条红牙刷左杯试采.md",
+      "prepared_session_id": "real_20261017_225121_red_left_trial01"
     },
     "G2": {
       "status": "pending",
@@ -114,7 +119,7 @@
   ],
   "next_actions": [
     "支稳从臂后处理当前锁力；已应用独立清理补丁，下一步现场短时Ctrl+C验收并收集id2原始comm/error；报错关节仍可能保持力矩，真机修复未验收",
-    "G1前核验录制入口dataset finalize/部分连接失败时的顶层清理；本轮仅修teleoperate入口及共享总线/从臂退出",
+    "用户现场执行已准备的red_left单条脚本；先支稳，q正常保存，留完整日志；检查episode/视频/state/action/时序与退出卸力后再继续",
     "单独验证Rerun显示降频/重复帧去重与代理缓存回收取舍，保留原始显示绕过，不直接改变控制频率",
     "保留JPEG解码告警完整上下文，独占验证发生频率、图像质量和USB稳定性；不要把残片当作本次退出崩溃根因",
     "继续核验腕相机走线活动余量与完整运动路径，当前4分钟循环不等同任务全过程验收",
@@ -141,10 +146,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "用户确认退出后肩关节下游仍锁力；退出清理补丁已应用并离线验证，未重启设备，真机卸力与底层设备状态待验",
+    "real_conversation_status": "用户要求单条red_left试采；启动器与录制异常清理补丁已准备/离线验证，尚未录制真实数据；设备由用户现场运行",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "Reviewed and applied reversible external runtime shutdown-only patch plus raw write diagnostics; ACT preserved by hash; 16 offline fault injection tests; no hardware access",
+    "last_update_scope": "record cleanup patch applied and11 in-memory tests; exact red_left argv parsing and metadata-only preflight; prepared unique root/log/launcher; no hardware connection or episode",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {

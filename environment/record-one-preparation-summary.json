@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-17",
+  "status": "prepared_not_recorded",
+  "task_id": "red_left",
+  "task": "Put the red toothbrush into the left cup.",
+  "session_id": "real_20261017_225121_red_left_trial01",
+  "operation_guide": "docs/单条红牙刷左杯试采.md",
+  "output_root": "outputs/real/real_20261017_225121_red_left_trial01",
+  "dataset_root": "data/real/real_20261017_225121_red_left_trial01",
+  "repo_id": "local/real_20261017_225121_red_left_trial01",
+  "requested_episodes": 1,
+  "max_episode_seconds": 45,
+  "requested_fps": 30,
+  "image_size": [
+    640,
+    480
+  ],
+  "camera_formats": {
+    "top": "YUYV",
+    "wrist": "MJPG"
+  },
+  "display_compression": false,
+  "video_codec": "h264",
+  "push_to_hub": false,
+  "resume": false,
+  "normal_finish": "support follower; q saves current episode then finalizes; one-episode timeout also saves",
+  "record_cleanup_patch": {
+    "path": "patches/lerobot/0002-record-independent-cleanup.patch",
+    "sha256": "4b79a1c2890c071c7bbdd52d4e211d92632a1d7dfe605d15ec7c7d8cfee21eaf",
+    "depends_on": "0001-best-effort-so101-shutdown.patch",
+    "applied": true,
+    "offline_tests_passed": 11,
+    "prior_act_and_cleanup_hashes_preserved": true
+  },
+  "verification": {
+    "exact_argv_config_parse": true,
+    "shell_syntax": true,
+    "metadata_check_only_exit_code": 0,
+    "check_only_group_context": "temporary child using already-established dialout membership; original desktop group unchanged",
+    "occupancy_scope": "fuser has observed proc permission limits; no known control CLI detected; operator must close every other control/preview",
+    "dataset_root_exists": false,
+    "hardware_started_by_agent": false,
+    "real_episodes_recorded": 0,
+    "real_qa": "not_started",
+    "project_tests_passed": 39,
+    "project_config_valid": true,
+    "project_config_complete": false
+  },
+  "remaining": [
+    "user real recording and completion/failure report",
+    "real torque-off and raw servo status/native abort verification",
+    "episode/task/video/parquet/state/action and timing QA",
+    "actual camera new-frame rate, scene layout and six-dimensional physical contract; G0 incomplete",
+    "G1 target 10-20 real episodes not achieved"
+  ]
+}

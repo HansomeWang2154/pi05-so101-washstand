@@ -38,9 +38,18 @@
   "limits": [
     "actual torque-off not verified; failing or unreachable motor may remain energized",
     "underlying motor status and native abort cause unresolved",
-    "record entry-point top-level finalization/partial-connect cleanup not changed; verify before G1",
+    "record entry-point cleanup patched by0002 and11 offline fault injections passed; actual recording/finalization/torque-off still unverified",
     "forced process termination and power/communication failure cannot guarantee software cleanup"
   ],
   "evidence_root": "outputs/real/real_20261017_shutdown_cleanup_fix/",
-  "next": "User-supported short teleoperation and Ctrl+C test with complete raw error log; retain power-off fallback; G0 incomplete and G1 not started"
+  "next": "User-supported short teleoperation and Ctrl+C test with complete raw error log; retain power-off fallback; G0 incomplete and G1 not started",
+  "record_followup": {
+    "path": "patches/lerobot/0002-record-independent-cleanup.patch",
+    "sha256": "4b79a1c2890c071c7bbdd52d4e211d92632a1d7dfe605d15ec7c7d8cfee21eaf",
+    "depends_on": "0001-best-effort-so101-shutdown.patch",
+    "applied": true,
+    "offline_tests_passed": 11,
+    "prior_act_and_cleanup_hashes_preserved": true,
+    "actual_recording_or_torque_off_verified": false
+  }
 }

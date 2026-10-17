@@ -1,0 +1,200 @@
+--- a/src/lerobot/scripts/lerobot_record.py
++++ b/src/lerobot/scripts/lerobot_record.py
+@@ -91,8 +91,9 @@
+
+ import logging
+ import time
+ from dataclasses import asdict, dataclass
++from functools import partial
+ from pprint import pformat
+
+ from lerobot.cameras import CameraConfig  # noqa: F401
+ from lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
+@@ -151,8 +152,9 @@
+     unitree_g1,
+ )
+ from lerobot.teleoperators.keyboard import KeyboardTeleop
+ from lerobot.utils.constants import ACTION, OBS_STR
++from lerobot.utils.cleanup import run_cleanup
+ from lerobot.utils.cycle_timer import CycleTimer
+ from lerobot.utils.feature_utils import build_dataset_frame, combine_feature_dicts
+ from lerobot.utils.import_utils import register_third_party_plugins
+ from lerobot.utils.keyboard_input import init_keyboard_listener
+@@ -385,56 +387,60 @@
+     robot_observation_processor: RobotProcessorPipeline | None = None,
+ ) -> LeRobotDataset:
+     init_logging()
+     logging.info(pformat(asdict(cfg)))
+-    if cfg.display_data:
+-        init_visualization(
+-            cfg.display_mode, session_name="recording", ip=cfg.display_ip, port=cfg.display_port
+-        )
+-    display_compressed_images = (
+-        True
+-        if (cfg.display_data and cfg.display_ip is not None and cfg.display_port is not None)
+-        else cfg.display_compressed_images
+-    )
+-
+-    robot = make_robot_from_config(cfg.robot)
+-    teleop = make_teleoperator_from_config(cfg.teleop) if cfg.teleop is not None else None
+-
+-    # Fall back to identity pipelines when the caller doesn't supply processors.
+-    if (
+-        teleop_action_processor is None
+-        or robot_action_processor is None
+-        or robot_observation_processor is None
+-    ):
+-        _t, _r, _o = make_default_processors()
+-        teleop_action_processor = teleop_action_processor or _t
+-        robot_action_processor = robot_action_processor or _r
+-        robot_observation_processor = robot_observation_processor or _o
+-
+-    dataset_features = combine_feature_dicts(
+-        aggregate_pipeline_dataset_features(
+-            pipeline=teleop_action_processor,
+-            initial_features=create_initial_features(
+-                action=robot.action_features
+-            ),  # TODO(steven, pepijn): in future this should be come from teleop or policy
+-            use_videos=cfg.dataset.video,
+-        ),
+-        aggregate_pipeline_dataset_features(
+-            pipeline=robot_observation_processor,
+-            initial_features=create_initial_features(observation=robot.observation_features),
+-            use_videos=cfg.dataset.video,
+-        ),
+-    )
+-
++    robot = None
++    teleop = None
+     dataset = None
+     listener = None
+-    # One timer for the whole session, so its statistics describe the recording rather
+-    # than one episode's slice of it.  The reset phases below deliberately run on their
+-    # own private timers: they write no frames, so folding their ticks in would dilute
+-    # every number that answers "did I record at `fps`?".
+-    timer = CycleTimer(cfg.dataset.fps)
+-
++    timer = None
++    primary_error = None
+     try:
++        if cfg.display_data:
++            init_visualization(
++                cfg.display_mode, session_name="recording", ip=cfg.display_ip, port=cfg.display_port
++            )
++        display_compressed_images = (
++            True
++            if (cfg.display_data and cfg.display_ip is not None and cfg.display_port is not None)
++            else cfg.display_compressed_images
++        )
++
++        robot = make_robot_from_config(cfg.robot)
++        teleop = make_teleoperator_from_config(cfg.teleop) if cfg.teleop is not None else None
++
++        # Fall back to identity pipelines when the caller doesn't supply processors.
++        if (
++            teleop_action_processor is None
++            or robot_action_processor is None
++            or robot_observation_processor is None
++        ):
++            _t, _r, _o = make_default_processors()
++            teleop_action_processor = teleop_action_processor or _t
++            robot_action_processor = robot_action_processor or _r
++            robot_observation_processor = robot_observation_processor or _o
++
++        dataset_features = combine_feature_dicts(
++            aggregate_pipeline_dataset_features(
++                pipeline=teleop_action_processor,
++                initial_features=create_initial_features(
++                    action=robot.action_features
++                ),  # TODO(steven, pepijn): in future this should be come from teleop or policy
++                use_videos=cfg.dataset.video,
++            ),
++            aggregate_pipeline_dataset_features(
++                pipeline=robot_observation_processor,
++                initial_features=create_initial_features(observation=robot.observation_features),
++                use_videos=cfg.dataset.video,
++            ),
++        )
++
++        # One timer for the whole session, so its statistics describe the recording rather
++        # than one episode's slice of it.  The reset phases below deliberately run on their
++        # own private timers: they write no frames, so folding their ticks in would dilute
++        # every number that answers "did I record at `fps`?".
++        timer = CycleTimer(cfg.dataset.fps)
++
+         if cfg.resume:
+             num_cameras = len(robot.cameras) if hasattr(robot, "cameras") else 0
+             dataset = LeRobotDataset.resume(
+                 cfg.dataset.repo_id,
+@@ -551,36 +557,46 @@
+                 # being charged to whichever episode they sit next to.  `restart()` then
+                 # exempts that first tick, whose cameras have been idle for seconds.
+                 timer.log_episode_summary(f"episode {episode_index}")
+                 timer.restart()
++    except BaseException as error:
++        primary_error = error
++        raise
+     finally:
+-        # First, and in `finally`: ^C is how most recording sessions end, and the summary
+-        # is most useful before the video encoding and the hub upload scroll it away.
+-        timer.log_run_summary()
+-
+-        log_say("Stop recording", cfg.play_sounds, blocking=True)
+-
+-        if dataset:
+-            dataset.finalize()
+-
+-        if robot.is_connected:
+-            robot.disconnect()
+-        if teleop and teleop.is_connected:
+-            teleop.disconnect()
+-
++        actions = []
++        # A composite is_connected flag can be false after a partial connection.
++        # Release hardware before retrying potentially slow dataset finalization.
++        if robot is not None:
++            actions.append(("robot", robot.disconnect))
++        if teleop is not None and teleop.is_connected:
++            actions.append(("teleoperator", teleop.disconnect))
+         if listener is not None:
+-            listener.stop()
+-
++            actions.append(("keyboard listener", listener.stop))
+         if cfg.display_data:
+-            shutdown_visualization(cfg.display_mode)
+-
+-        if cfg.dataset.push_to_hub:
+-            if dataset and dataset.num_episodes > 0:
+-                dataset.push_to_hub(tags=cfg.dataset.tags, private=cfg.dataset.private)
+-            else:
+-                logging.warning("No episodes saved — skipping push to hub")
+-
+-        log_say("Exiting", cfg.play_sounds)
++            actions.append(("visualization", partial(shutdown_visualization, cfg.display_mode)))
++        if timer is not None:
++            actions.append(("recording timing summary", timer.log_run_summary))
++        # A newly created dataset with zero saved frames has a false bool value.
++        if dataset is not None:
++            actions.append(("dataset finalization", dataset.finalize))
++        actions.append(("stop notification", partial(log_say, "Stop recording", cfg.play_sounds, blocking=True)))
++        try:
++            run_cleanup(actions)
++        except BaseException as cleanup_error:
++            if primary_error is not None:
++                raise BaseExceptionGroup(
++                    "Recording and cleanup both failed", [primary_error, cleanup_error]
++                ) from None
++            raise
++
++    # Upload only after recording and every cleanup action completed successfully.
++    if cfg.dataset.push_to_hub:
++        if dataset is not None and dataset.num_episodes > 0:
++            dataset.push_to_hub(tags=cfg.dataset.tags, private=cfg.dataset.private)
++        else:
++            logging.warning("No episodes saved — skipping push to hub")
++
++    log_say("Exiting", cfg.play_sounds)
+     return dataset
+
+
+ def main():

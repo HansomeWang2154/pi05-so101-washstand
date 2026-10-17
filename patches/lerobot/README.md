@@ -20,3 +20,17 @@ python /path/to/pi05-so101-washstand/patches/lerobot/verify_shutdown.py /path/to
 16项测试涵盖单/多电机故障、清缓冲/关串口失败、相机故障和残留线程、部分连接、Ctrl+C及清理中中断、主错误保留、显示器失败，以及原始错误码/真实重试次数。此验证独立于普通项目测试，需要显式指定运行时；它不能证明真实卸力或native abort已修复。
 
 保留补丁便于外部运行时版本追踪；不要以`git reset`或替换整个外部目录的方式清理用户已有ACT改动。后续升级LeRobot时重新审查及测试，不能只依据包版本号认定补丁仍有效。录制入口的顶层收尾另需验收。
+
+## 录制入口补充：0002
+
+随后为用户单条red_left试采准备了`0002-record-independent-cleanup.patch`，本机也已应用。它依赖0001的`run_cleanup`，将record的构造/连接纳入异常保护，独立处理硬件与数据收尾，零帧dataset也finalize，清理失败不上传。现有模型、动作和编码配置不变。
+
+其他匹配运行时先应用0001，再检查并应用0002：
+
+```bash
+git -C /path/to/lerobot apply --check /path/to/pi05-so101-washstand/patches/lerobot/0002-record-independent-cleanup.patch
+git -C /path/to/lerobot apply /path/to/pi05-so101-washstand/patches/lerobot/0002-record-independent-cleanup.patch
+python /path/to/pi05-so101-washstand/patches/lerobot/verify_record_cleanup.py /path/to/lerobot
+```
+
+11项录制故障注入在应用前、应用后和补丁重建副本中通过，包含部分连接/零帧收尾、单条正常保存、finalize失败仍卸力、原错及异常上下文保留、显示器/通知失败、失败不上传。测试是虚拟设备和数据集，不代表真实数据或实际卸力。管理器首次编码仍先于外层硬件清理，结束录制前需支撑从臂。完整操作见[单条试采](../../docs/单条红牙刷左杯试采.md)。
