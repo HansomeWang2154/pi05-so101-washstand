@@ -86,7 +86,8 @@
     "确认实际串口与top/wrist相机编号",
     "验证相机画面和校准",
     "做人工遥操作可行性检查",
-    "录制10到20条试采并检查"
+    "录制10到20条试采并检查",
+    "模型训练角色可并行核对LeRobot入口、参数范围与处理器/训练统计审计方案，等待G1数据后推进G2"
   ],
   "unverified": [
     "robot calibration",
@@ -100,7 +101,7 @@
   ],
   "collaboration": {
     "updated_date": "2026-10-17",
-    "user_decision": "真实数据采集和直接实机事项交由用户另开的对话；原规划/仿真对话保留仿真/离线准备，角色以最新用户任务为准",
+    "user_decision": "多个对话/agent按规划整合、仿真、真机采集、模型训练及专项子任务协作，不限定对话数量；角色以最新用户任务为准",
     "memory_handoff_doc": "docs/项目记忆与真机交接.md",
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
@@ -108,6 +109,26 @@
     "real_conversation_status": "用户准备新建；本轮未创建、未派发或核验对话ID",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "documentation_only; no hardware, recording, cloud or training started"
+    "last_update_scope": "documentation_only; no hardware, recording, cloud or training started",
+    "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
+    "training_experiment_template": "templates/experiment.md",
+    "role_handoffs": {
+      "real_hardware_collection": "docs/项目记忆与真机交接.md",
+      "model_training": "docs/项目记忆与模型训练交接.md",
+      "simulation": "docs/仿真实施记录.md"
+    },
+    "training_conversation_created_by_this_task": false,
+    "training_jobs_started_this_update": 0,
+    "task_registration": "见协作约定第3节：task_id、父角色、主负责人、工作目录/分支、文件范围、上游版本、交付/验收和占用资源",
+    "experiment_ownership": "one main owner per experiment; frozen dataset/split/statistics/contract versions; GPU jobs and output paths coordinated",
+    "planned_workstreams": {
+      "planning_integration": "shared state and accepted change integration",
+      "simulation": "prototype_v1_completed; alignment_pending",
+      "real_G0_G1": "pending_assignment_and_actual_verification",
+      "training_preparation": "pending_assignment; local_preparation_can_parallelize",
+      "training_G2": "waiting_for_G1_evidence",
+      "training_G4": "waiting_for_G3_freeze_and_G2_measurements",
+      "real_deployment_evaluation": "waiting_for_validated_model_and_interface"
+    }
   }
 }
