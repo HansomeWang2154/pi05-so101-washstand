@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-17",
+  "scope": "G0 communication dependency repair; no device connection or motion",
+  "issue": "ISSUE-017",
+  "environment": "existing lerobot conda environment, also reused by project .venv",
+  "lerobot_version": "0.6.2",
+  "dependencies_file": "environment/real-hardware-requirements.txt",
+  "installed_packages": {
+    "feetech-servo-sdk": "1.0.0",
+    "pyserial": "3.5",
+    "deepdiff": "8.6.2",
+    "orderly-set": "5.5.0"
+  },
+  "checks": {
+    "scservo_sdk_import": "passed",
+    "serial_import": "passed",
+    "deepdiff_import": "passed",
+    "FeetechMotorsBus_constructor_with_non_device_path": "passed",
+    "serial_port_opened": false,
+    "existing_packages_changed": {},
+    "existing_packages_removed": {}
+  },
+  "unverified": [
+    "real serial permissions and device identity",
+    "motor model compatibility and communication",
+    "calibration loading or generation",
+    "teleoperation and camera capture"
+  ],
+  "local_evidence": [
+    "environment/feetech-before.local.json",
+    "environment/feetech-install-plan.local.json",
+    "environment/feetech-installed.local.json",
+    "environment/feetech-repair.local.json",
+    "outputs/real/real_20261017_160218_teleop_dependency_failure/session.md"
+  ]
+}

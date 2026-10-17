@@ -1,0 +1,6 @@
+# Added to existing LeRobot 0.6.2 runtime on 2026-10-17.
+# Communication dependencies only; not a complete standalone environment.
+feetech-servo-sdk==1.0.0
+pyserial==3.5
+deepdiff==8.6.2
+orderly-set==5.5.0

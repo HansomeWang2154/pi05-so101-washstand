@@ -22,15 +22,18 @@
       ]
     },
     "G0": {
-      "status": "pending",
+      "status": "in_progress",
       "description": "硬件、环境、数据契约实际验证",
       "calibration_user_report": "2026-10-17两臂由卖家预先校准；用户最新决定自行在本机重新校准，尚无实际校准或跟随验证证据",
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
+      "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
+      "latest_user_attempt": "2026-10-17遥操作启动在设备连接前因缺少SDK失败；同conda环境依赖已修复，待现场30Hz重试",
       "preparation_verified": [
         "当前LeRobot遥操作、SO101类型参数和录制模块CLI帮助返回0",
         "只读核对原标定复用、续录及键盘保存/丢弃语义；未启动设备",
-        "当前主臂和从臂校准CLI帮助均返回0；已核对中间姿态、五关节范围及保存流程，未实际校准"
+        "当前主臂和从臂校准CLI帮助均返回0；已核对中间姿态、五关节范围及保存流程，未实际校准",
+        "SDK/pyserial/deepdiff已补齐，导入和未连接通信对象构造通过；没有原有包变更或删除"
       ]
     },
     "G1": {
@@ -115,10 +118,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "用户已在当前对话指定真机/采集职责；完成操作指南与CLI核对，未启动设备",
+    "real_conversation_status": "当前真机对话已修复用户启动报错的通信依赖；用户现场重试待执行，agent未连接设备",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "real_operation_documentation_and_read_only_CLI_help; no hardware, recording, cloud or training started",
+    "last_update_scope": "serial installation of missing hardware dependencies in existing conda; user-reported pre-connection failure recorded; no agent device connection or recording",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
@@ -133,7 +136,7 @@
     "planned_workstreams": {
       "planning_integration": "shared state and accepted change integration",
       "simulation": "prototype_v1_completed; alignment_pending",
-      "real_G0_G1": "assigned_to_current_real_conversation; preparation_only; actual_verification_pending",
+      "real_G0_G1": "G0_dependency_repair_verified; real_device_retry_pending; G1_not_started",
       "training_preparation": "pending_assignment; local_preparation_can_parallelize",
       "training_G2": "waiting_for_G1_evidence",
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",
