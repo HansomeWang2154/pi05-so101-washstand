@@ -34,7 +34,7 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "22:05用户可见串口但预检拒绝；22:03重插清掉临时ACL，账户仍有dialout而旧会话未刷新。旧会话CHECK_ONLY退出2，使用已有dialout组的临时子进程退出0，四设备元数据通过；用户原终端newgrp后带相机实际重试待反馈，未打开设备",
+      "latest_user_attempt": "22:13四设备接通，控制256.5秒/29.90Hz，0工作预算超时；用户确认两路画面与窗口正常，权限阶段已越过。Ctrl+C后从臂id2关力矩RuntimeError并Aborted，ISSUE-019普通退出复发；用户已支稳，未确认整臂扭矩释放，未录真实episode",
       "camera_debug_evidence": "environment/camera-debug-summary.json",
       "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
@@ -47,7 +47,8 @@
         "用户确认top/wrist身份；相机独占短测可取帧，实测帧率低于请求值；Rerun依赖与双图片记录通过",
         "用户带相机日志确认四设备连接和14.7秒控制循环；腕相机物理断连与内核记录吻合，走线及异常收尾仍待验",
         "Rerun JPEG显示路径最小对照可触发卡住；关闭显示压缩的保存真实双图和目标30Hz/300次回放（总耗时11.00秒含结束等待），两次窗口截图响应通过；不是真实相机帧率或机械臂运行验证",
-        "22:05重接后四节点存在；旧会话串口无rw，账户仍含dialout；使用已有组的临时子进程仅CHECK_ONLY退出0，未改ACL/权限或打开硬件"
+        "22:05重接后四节点存在；旧会话串口无rw，账户仍含dialout；使用已有组的临时子进程仅CHECK_ONLY退出0，未改ACL/权限或打开硬件",
+        "用户新日志确认关闭显示压缩下四设备连接并控制256.5秒/29.90Hz；用户确认双画面和窗口正常；本轮退出失败且真实相机新帧率未测"
       ],
       "rerun_debug_report": "docs/Rerun无响应调试报告_2026-10-17.md"
     },
@@ -109,15 +110,15 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "在原遥操作终端单独newgrp dialout或完整注销重新登录，确认新会话组后激活lerobot；更新脚本先检查设备权限再现场重试，无需重复usermod",
-    "先检查腕相机线材/连接器，设置腕部/臂身/底座应力释放和活动余量，再验证完整运动路径不拉线",
-    "用户先支稳退出控制并关闭旧无响应viewer，再用关闭显示压缩的更新脚本小幅重试；设备占用时不独立取帧，之后再安排相机稳定复测",
-    "处理ISSUE-019异常资源清理缺陷，保留关力矩失败证据，不能以关闭力矩释放功能掩盖",
-    "继续排查双路新帧率低于30Hz并冻结稳定图像/控制设置，再完成六维与时序契约",
-    "复用已保存的两臂标定，完成六关节实际方向/范围、夹爪及任务完整路径核验；不主动重复标定",
-    "锁定top/wrist安装方向、未镜像画面和稳定路径，补齐场景尺寸证据",
-    "录制10到20条试采并检查",
-    "模型训练角色可并行核对LeRobot入口、参数范围与处理器/训练统计审计方案，等待G1数据后推进G2"
+    "优先定位Ctrl+C时从臂id2关力矩设备error并保证各关节/串口/相机独立清理，记录原始error字节；用户已支稳，不能假定全臂已释放力矩",
+    "单独验证Rerun显示降频/重复帧去重与代理缓存回收取舍，保留原始显示绕过，不直接改变控制频率",
+    "保留JPEG解码告警完整上下文，独占验证发生频率、图像质量和USB稳定性；不要把残片当作本次退出崩溃根因",
+    "继续核验腕相机走线活动余量与完整运动路径，当前4分钟循环不等同任务全过程验收",
+    "继续测量双路实际新帧率，冻结图像/控制设置并完成六维动作和O_t/A_t时序契约",
+    "锁定top/wrist固定安装、工作距/对焦、未镜像方向及左右定义，补齐场景尺寸证据",
+    "复用已保存标定，核验六关节实际方向/范围、夹爪和完整任务路径",
+    "录制10到20条真实试采并检查；本轮teleoperate未录制episode",
+    "模型训练角色可并行本地准备，等待G1真实契约及QA后推进G2"
   ],
   "unverified": [
     "physical calibration direction/range and complete action contract",
@@ -136,10 +137,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "串口重插后临时ACL消失、旧组会话预检失败；已有dialout组子进程CHECK_ONLY通过，用户原终端待刷新后重试；无agent硬件连接",
+    "real_conversation_status": "用户完成256.5秒带相机遥操作并确认双画面正常；Ctrl+C从臂id2关力矩及清理失败，原ISSUE-019优先；仅只读审查，无agent设备访问",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "read-only device/group/ACL recurrence evidence; clearer local launcher preflight; existing-group child CHECK_ONLY comparison; no hardware connection or permission mutation",
+    "last_update_scope": "user real teleoperation log and GUI feedback, cadence and cleanup recurrence review; bounded Rerun history-cache and partial JPEG warning analysis; no runtime or device mutations",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
@@ -154,7 +155,7 @@
     "planned_workstreams": {
       "planning_integration": "shared state and accepted change integration",
       "simulation": "prototype_v1_completed; alignment_pending",
-      "real_G0_G1": "G0_raw_display_workaround_verified_offline; real_retest_routing_cleanup_rates_contract_pending; G1_not_started",
+      "real_G0_G1": "G0_user_combined_run_256s_and_GUI_verified; shutdown_cleanup_camera_rates_contract_pending; G1_not_started",
       "training_preparation": "pending_assignment; local_preparation_can_parallelize",
       "training_G2": "waiting_for_G1_evidence",
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",

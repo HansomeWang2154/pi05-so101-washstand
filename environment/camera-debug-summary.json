@@ -50,7 +50,7 @@
     "existing_packages_removed": {},
     "two_image_logging_and_rrd_write": "passed",
     "native_binary_version_command_exit_code": 0,
-    "live_viewer_window": "Saved real images + synthetic scalar streaming: target30Hz, 300 sends, total11.00s including final wait, two responsive screenshots; no live cameras or robot",
+    "live_viewer_window": "User confirms both real camera views visible and window responsive during 22:13 combined run; control measurement256.5s; shutdown still failed",
     "compressed_image_issue": {
       "issue": "ISSUE-020",
       "report": "docs/Rerun无响应调试报告_2026-10-17.md",
@@ -60,7 +60,7 @@
       "automatic_screenshot_exit": "PNG generated then independent store-hub panic, exit102; not a clean exit; ordinary live screenshot API test had no such panic",
       "workaround": "local launcher display_compressed_images=false; camera YUYV/MJPG unchanged",
       "root_cause_scope": "compressed image path trigger isolated; underlying blocking function unknown",
-      "real_teleoperation_after_workaround": "not tested yet",
+      "real_teleoperation_after_workaround": "User combined log: four devices connected, control256.5s/29.90Hz; user confirms both views and window normal; Ctrl+C torque-disable failure is separate ISSUE-019",
       "evidence_root": "outputs/real/real_20261017_165353_rerun_freeze/"
     }
   },
@@ -91,7 +91,7 @@
     "independent exception-resilient cleanup of serial/camera resources; ISSUE-019",
     "camera mounting, unmirrored orientation, workspace coverage and wrist focus",
     "stable measured camera rates and exposure/USB investigation",
-    "combined camera + robot + raw-image viewer retest in user terminal; underlying JPEG-path cause unresolved",
+    "clean Ctrl+C shutdown after follower id2 torque-disable failure; raw-image live display user-confirmed, underlying JPEG display trigger unresolved",
     "measured six-dimensional action and timing contract",
     "G1 real pilot recording and full QA"
   ],
@@ -124,5 +124,44 @@
       "hardware_opened": false,
       "next": "reconnect and verify device identity, paths and permissions before real retest"
     }
-  ]
+  ],
+  "latest_combined_run": {
+    "start_local": "2026-10-17 22:13:08",
+    "ctrl_c_local": "2026-10-17 22:17:30",
+    "devices_connected": [
+      "leader",
+      "top",
+      "wrist",
+      "follower"
+    ],
+    "control_measured_s": 256.5,
+    "effective_control_hz": 29.9,
+    "ticks": 7672,
+    "judged": 7671,
+    "over_work_budget": 0,
+    "work_mean_ms": 3.8,
+    "work_worst_ms": 10.7,
+    "cadence_slips": 5,
+    "user_confirms_both_views_and_window_normal": true,
+    "user_confirms_follower_supported": true,
+    "exit_failure": {
+      "issue": "ISSUE-019",
+      "motor_id": 2,
+      "joint": "shoulder_lift",
+      "operation": "Torque_Enable=0",
+      "exception": "RuntimeError in device-error branch",
+      "native_abort": true,
+      "raw_error_detail": "unknown",
+      "all_motor_torque_off_verified": false
+    },
+    "other_messages": {
+      "grpc_proxy": "INFO bounded historical/static cache eviction; no dataset loss proven",
+      "socks_proxy": "HTTP client build lacks SOCKS feature; request unknown",
+      "jpeg_fragment": "likely decoder warning, interleaved, source/frequency unknown"
+    },
+    "camera_new_frame_rates_measured": false,
+    "real_episodes_recorded": false,
+    "agent_hardware_access": false,
+    "evidence_root": "outputs/real/real_20261017_221308_teleop_review/"
+  }
 }
