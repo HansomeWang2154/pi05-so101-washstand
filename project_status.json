@@ -59,14 +59,16 @@
     "G1": {
       "status": "in_progress",
       "description": "诊断试采已保存1条，QA排除，有效示范0条；未达10～20条目标",
-      "preparation_status": "原始显示试采发生长阻塞；已准备新目录、不显示Rerun但继续双路视频的单条重试，解析/check-only通过，未启动重试",
+      "preparation_status": "新增固定record.sh，默认red_left单条/关闭实时显示，每次新建目录和日志；命令解析/语法/check-only通过；未启动新的实际录制",
       "preparation_evidence": "environment/record-one-preparation-summary.json",
       "operation_guide": "docs/单条红牙刷左杯试采.md",
       "prepared_session_id": "real_20261017_230417_red_left_trial02_nodisplay",
       "recorded_real_episodes": 1,
       "accepted_real_demonstrations": 0,
       "excluded_real_episodes": 1,
-      "qa_evidence": "environment/first-real-pilot-qa-summary.json"
+      "qa_evidence": "environment/first-real-pilot-qa-summary.json",
+      "launch_script": "scripts/record.sh",
+      "launcher_evidence": "environment/record-launcher-summary.json"
     },
     "G2": {
       "status": "pending",
@@ -122,7 +124,7 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "使用新准备的display_data=false单条脚本由用户现场复测；top/wrist继续录视频，关闭旧viewer与其他设备进程，保留上一失败数据，q不是急停",
+    "用户通过scripts/record.sh启动单条red_left复测，默认不显示Rerun但保留top/wrist视频；关闭其他控制/预览，支撑后q正常保存，保留旧失败数据",
     "首条真实212帧已QA排除（132秒telemetry阻塞、action恒定）；第二条后复核完整抓放、真实循环时间、视频与数值、退出卸力，不能依赖名义30Hz或仅进程0",
     "单独验证Rerun显示降频/重复帧去重与代理缓存回收取舍，保留原始显示绕过，不直接改变控制频率",
     "保留JPEG解码告警完整上下文，独占验证发生频率、图像质量和USB稳定性；不要把残片当作本次退出崩溃根因",
@@ -153,7 +155,7 @@
     "real_conversation_status": "用户首条真实数据已保存并QA排除；已支撑并退出，未再接管硬件；准备不显示Rerun的第二条，待用户现场执行",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "Read-only real pilot QA (212 frames per view, constant action,132s telemetry stall), preserved failed artifacts, prepared display-disabled retry; no runtime mutation or device access",
+    "last_update_scope": "Added reusable bash recording launcher from current local configuration; offline argv parse and metadata-only preflight; no device connection or additional real episode",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {

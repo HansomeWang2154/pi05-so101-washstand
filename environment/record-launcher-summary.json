@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-17",
+  "script": "scripts/record.sh",
+  "status": "written_offline_verified_not_started",
+  "defaults": {
+    "task": "Put the red toothbrush into the left cup.",
+    "episodes": 1,
+    "fps": 30,
+    "episode_time_s": 45,
+    "reset_time_s": 15,
+    "display_data": false,
+    "both_camera_videos_recorded": true,
+    "video_codec": "h264",
+    "push_to_hub": false,
+    "resume": false
+  },
+  "machine_device_source": "ignored configs/local.json merged with configs/project.json; no USB serial identifiers embedded in public script",
+  "session_policy": "new Asia/Shanghai timestamp plus process ID per invocation; refuse existing data/log roots",
+  "parameters": [
+    "TASK",
+    "NUM_EPISODES",
+    "EPISODE_TIME_S",
+    "RESET_TIME_S",
+    "SESSION_ID",
+    "FOLLOWER_CALIBRATION_DIR",
+    "LEADER_CALIBRATION_DIR"
+  ],
+  "validation": {
+    "shell_syntax": true,
+    "generated_argv_RecordConfig_parse": true,
+    "dry_run_created_no_data_or_log_directory": true,
+    "metadata_check_only_exit_code": 0,
+    "occupancy_visibility_limited": true,
+    "project_tests_passed": 39,
+    "config_valid": true,
+    "config_complete": false,
+    "config_missing": [
+      "data.repo_id"
+    ],
+    "hardware_started_by_agent": false
+  },
+  "retained_user_files": [
+    "scripts/record.py",
+    "SO-ARM101开源6轴机械臂/"
+  ],
+  "limits": [
+    "actual recording not launched by agent",
+    "45 seconds and q checked at loop boundaries, not an emergency stop",
+    "real camera rate/action contract and G1 accepted demonstrations still pending"
+  ]
+}
