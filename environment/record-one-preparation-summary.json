@@ -52,5 +52,12 @@
     "episode/task/video/parquet/state/action and timing QA",
     "actual camera new-frame rate, scene layout and six-dimensional physical contract; G0 incomplete",
     "G1 target 10-20 real episodes not achieved"
-  ]
+  ],
+  "latest_result": {
+    "qa_evidence": "environment/first-real-pilot-qa-summary.json",
+    "saved_episodes": 1,
+    "saved_frames": 212,
+    "training_eligible": false,
+    "new_retry_session_id": "real_20261017_230417_red_left_trial02_nodisplay"
+  }
 }

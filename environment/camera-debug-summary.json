@@ -173,5 +173,15 @@
     "motor_error_root_cause": "unknown",
     "native_abort_resolved": false,
     "agent_hardware_access": false
+  },
+  "first_real_recording_followup": {
+    "summary": "environment/first-real-pilot-qa-summary.json",
+    "real_episodes_saved": 1,
+    "accepted_demos": 0,
+    "rerun_telemetry_worst_ms": 132156.34,
+    "both_h264_videos_decoded_frames": 212,
+    "jpeg_source_warning_present": true,
+    "camera_new_frame_rate_not_proven": true,
+    "next": "display_data=false; both cameras still recorded; retry not started"
   }
 }

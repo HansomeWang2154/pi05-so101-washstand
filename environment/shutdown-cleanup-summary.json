@@ -51,5 +51,13 @@
     "offline_tests_passed": 11,
     "prior_act_and_cleanup_hashes_preserved": true,
     "actual_recording_or_torque_off_verified": false
+  },
+  "real_recording_followup": {
+    "summary": "environment/first-real-pilot-qa-summary.json",
+    "software_shutdown_completed_without_exception": true,
+    "four_disconnect_logs": true,
+    "recorder_exit_code": 0,
+    "physical_torque_off_confirmed": false,
+    "native_abort_observed_this_run": false
   }
 }

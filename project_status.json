@@ -34,7 +34,7 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "22:13四设备接通，控制256.5秒/29.90Hz，0工作预算超时；用户确认两路画面与窗口正常，权限阶段已越过。Ctrl+C后从臂id2关力矩RuntimeError并Aborted，ISSUE-019普通退出复发；用户已支稳，未确认整臂扭矩释放，未录真实episode；后续用户确认肩关节之后仍保持锁力",
+      "latest_user_attempt": "22:59 red_left首条实际录制，Rerun同步发送阻塞132.156秒；保存1个episode/212帧、action完全恒定，排除训练。23:01:29四设备断开、进程0；用户确认支撑并退出，物理卸力仍未单独确认",
       "camera_debug_evidence": "environment/camera-debug-summary.json",
       "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
@@ -54,15 +54,19 @@
       ],
       "rerun_debug_report": "docs/Rerun无响应调试报告_2026-10-17.md",
       "shutdown_cleanup_evidence": "environment/shutdown-cleanup-summary.json",
-      "shutdown_cleanup_status": "已应用可逆退出清理/原始错误码补丁，16项离线故障注入与CLI帮助通过；真机卸力及底层设备error/native abort待复测，已有ACT改动保持"
+      "shutdown_cleanup_status": "0001/0002清理补丁离线通过；首条实际录制四设备正常断开、进程0且无卸力异常，本轮未复发native abort；物理释放与底层历史舵机error仍待核验"
     },
     "G1": {
-      "status": "pending",
-      "description": "真机试采与数据检查",
-      "preparation_status": "已按用户任务准备red_left单条启动器，完整参数解析及元数据check-only通过；未启动录制、未采真实episode",
+      "status": "in_progress",
+      "description": "诊断试采已保存1条，QA排除，有效示范0条；未达10～20条目标",
+      "preparation_status": "原始显示试采发生长阻塞；已准备新目录、不显示Rerun但继续双路视频的单条重试，解析/check-only通过，未启动重试",
       "preparation_evidence": "environment/record-one-preparation-summary.json",
       "operation_guide": "docs/单条红牙刷左杯试采.md",
-      "prepared_session_id": "real_20261017_225121_red_left_trial01"
+      "prepared_session_id": "real_20261017_230417_red_left_trial02_nodisplay",
+      "recorded_real_episodes": 1,
+      "accepted_real_demonstrations": 0,
+      "excluded_real_episodes": 1,
+      "qa_evidence": "environment/first-real-pilot-qa-summary.json"
     },
     "G2": {
       "status": "pending",
@@ -118,8 +122,8 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "支稳从臂后处理当前锁力；已应用独立清理补丁，下一步现场短时Ctrl+C验收并收集id2原始comm/error；报错关节仍可能保持力矩，真机修复未验收",
-    "用户现场执行已准备的red_left单条脚本；先支稳，q正常保存，留完整日志；检查episode/视频/state/action/时序与退出卸力后再继续",
+    "使用新准备的display_data=false单条脚本由用户现场复测；top/wrist继续录视频，关闭旧viewer与其他设备进程，保留上一失败数据，q不是急停",
+    "首条真实212帧已QA排除（132秒telemetry阻塞、action恒定）；第二条后复核完整抓放、真实循环时间、视频与数值、退出卸力，不能依赖名义30Hz或仅进程0",
     "单独验证Rerun显示降频/重复帧去重与代理缓存回收取舍，保留原始显示绕过，不直接改变控制频率",
     "保留JPEG解码告警完整上下文，独占验证发生频率、图像质量和USB稳定性；不要把残片当作本次退出崩溃根因",
     "继续核验腕相机走线活动余量与完整运动路径，当前4分钟循环不等同任务全过程验收",
@@ -146,10 +150,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "用户要求单条red_left试采；启动器与录制异常清理补丁已准备/离线验证，尚未录制真实数据；设备由用户现场运行",
+    "real_conversation_status": "用户首条真实数据已保存并QA排除；已支撑并退出，未再接管硬件；准备不显示Rerun的第二条，待用户现场执行",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "record cleanup patch applied and11 in-memory tests; exact red_left argv parsing and metadata-only preflight; prepared unique root/log/launcher; no hardware connection or episode",
+    "last_update_scope": "Read-only real pilot QA (212 frames per view, constant action,132s telemetry stall), preserved failed artifacts, prepared display-disabled retry; no runtime mutation or device access",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
@@ -164,7 +168,7 @@
     "planned_workstreams": {
       "planning_integration": "shared state and accepted change integration",
       "simulation": "prototype_v1_completed; alignment_pending",
-      "real_G0_G1": "G0_shutdown_cleanup_patch_applied_offline_verified; hardware_shutdown_motor_error_camera_rates_contract_pending; G1_not_started",
+      "real_G0_G1": "G0_Rerun_backpressure_and_physical_contract_pending; G1_one_real_attempt_saved_excluded_zero_accepted; second_no_display_prepared_not_started",
       "training_preparation": "pending_assignment; local_preparation_can_parallelize",
       "training_G2": "waiting_for_G1_evidence",
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",

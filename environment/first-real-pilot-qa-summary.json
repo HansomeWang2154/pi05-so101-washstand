@@ -1,0 +1,195 @@
+{
+  "session_id": "real_20261017_225121_red_left_trial01",
+  "saved_episodes": 1,
+  "saved_frames": 212,
+  "task_rows": [
+    {
+      "task_index": 0,
+      "task": "Put the red toothbrush into the left cup."
+    }
+  ],
+  "episode_length": 212,
+  "nominal_fps": 30,
+  "nominal_video_seconds": 7.066666666666666,
+  "video": {
+    "top": {
+      "width": 640,
+      "height": 480,
+      "codec": "h264",
+      "average_rate": "30",
+      "decoded_frames": 212,
+      "decode_error": null,
+      "frame_count_matches_data": true,
+      "pts_first": 0.0,
+      "pts_last": 7.033333333333333,
+      "pts_strictly_increasing": true,
+      "identical_adjacent_decoded_frames": 0,
+      "mean_pixel_brightness_range": [
+        109.87879123263889,
+        115.383544921875
+      ],
+      "sha256": "0911c34eec3e8c0eb4213e927997957d1af052d5794bd21ca33ea1688bd09b7f"
+    },
+    "wrist": {
+      "width": 640,
+      "height": 480,
+      "codec": "h264",
+      "average_rate": "30",
+      "decoded_frames": 212,
+      "decode_error": null,
+      "frame_count_matches_data": true,
+      "pts_first": 0.0,
+      "pts_last": 7.033333333333333,
+      "pts_strictly_increasing": true,
+      "identical_adjacent_decoded_frames": 0,
+      "mean_pixel_brightness_range": [
+        158.10172309027777,
+        163.67905598958333
+      ],
+      "sha256": "57c466528ef5e854ea84482854e78292d34556d0fa8d05d8299cc824d3ad3025"
+    }
+  },
+  "numeric": {
+    "action": {
+      "shape": [
+        212,
+        6
+      ],
+      "finite": true,
+      "min": [
+        8.263736724853516,
+        -98.5934066772461,
+        92.21977996826172,
+        63.120880126953125,
+        -6.109889984130859,
+        0.4108463525772095
+      ],
+      "max": [
+        8.263736724853516,
+        -98.5934066772461,
+        92.21977996826172,
+        63.120880126953125,
+        -6.109889984130859,
+        0.4108463525772095
+      ],
+      "range": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "unique_rows": 1,
+      "max_abs_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "observation.state": {
+      "shape": [
+        212,
+        6
+      ],
+      "finite": true,
+      "min": [
+        2.549450635910034,
+        -100.87911987304688,
+        96.35164642333984,
+        59.29670333862305,
+        -5.670329570770264,
+        1.0921502113342285
+      ],
+      "max": [
+        7.648351669311523,
+        -100.0,
+        97.4945068359375,
+        62.989009857177734,
+        -5.670329570770264,
+        1.0921502113342285
+      ],
+      "range": [
+        5.098901033401489,
+        0.879119873046875,
+        1.1428604125976562,
+        3.6923065185546875,
+        0.0,
+        0.0
+      ],
+      "unique_rows": 10,
+      "max_abs_step": [
+        1.4065935611724854,
+        0.43956756591796875,
+        0.4395599365234375,
+        0.9670333862304688,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "timestamp": {
+    "first": 0.0,
+    "last": 7.0333333015441895,
+    "strictly_increasing": true,
+    "max_nominal_grid_error_s": 2.2252400722067023e-07,
+    "matches_frame_index_grid": true,
+    "not_host_capture_clock": true
+  },
+  "indexes": {
+    "frame_index_contiguous": true,
+    "episode_indexes": [
+      0
+    ],
+    "task_indexes": [
+      0
+    ]
+  },
+  "shutdown": {
+    "recorder_exit_code": 0,
+    "top_disconnect_logged": true,
+    "wrist_disconnect_logged": true,
+    "follower_disconnect_logged": true,
+    "leader_disconnect_logged": true,
+    "traceback_present": false,
+    "user_confirms_supported_and_exited": true,
+    "physical_torque_off_confirmed": false
+  },
+  "timing": {
+    "record_begin_local": "2026-10-17 22:59:06",
+    "stall_return_warning_local": "2026-10-17 23:01:25",
+    "shutdown_local": "2026-10-17 23:01:29",
+    "telemetry_worst_ms": 132156.34,
+    "telemetry_mean_ms": 624.84,
+    "telemetry_share_percent": 99.7,
+    "reported_tick_gap_cadence_hz": 29.94,
+    "tick_gap_measured_s": 7.0,
+    "reported_cadence_includes_final_stall": false,
+    "wall_interval_to_stall_return_approx_s": 139,
+    "wall_cadence_rough_hz": 1.525179856115108,
+    "warning": "Frame-index timestamps and end-of-stream PTS are nominal; final long tick is absent from tick-gap span, so 29.94Hz is not full-run real-time cadence."
+  },
+  "training_eligible": false,
+  "qa_result": "exclude_system_stall_and_no_task_action_trajectory",
+  "date": "2026-10-17",
+  "source": "real",
+  "status": "saved_but_excluded",
+  "report": "docs/首条真实试采QA_2026-10-17.md",
+  "evidence_root": "outputs/real/real_20261017_230158_record_rerun_backpressure",
+  "original_data_preserved": true,
+  "agent_device_access": false,
+  "accepted_real_demos": 0,
+  "retry": {
+    "session_id": "real_20261017_230417_red_left_trial02_nodisplay",
+    "display_data": false,
+    "both_cameras_and_video_retained": true,
+    "status": "prepared_not_started",
+    "exact_config_parse": true,
+    "metadata_check_only_exit_code": 0,
+    "occupancy_visibility_limited": true,
+    "root_exists": false
+  }
+}
