@@ -1,0 +1,6 @@
+# Observed Python 3.12 simulation runtime; LeRobot is a separate dependency.
+mujoco==3.8.1
+numpy==2.2.6
+scipy==1.18.1
+av==15.1.0
+Pillow==12.3.0

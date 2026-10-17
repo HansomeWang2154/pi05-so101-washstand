@@ -1,5 +1,5 @@
 {
-  "updated_date": "2026-10-16",
+  "updated_date": "2026-10-17",
   "current_phase": "G0_hardware_environment_verification",
   "issue_log": "docs/问题记录.md",
   "simulation_design_doc": "docs/仿真环境与专家数据生成方案.md",
@@ -54,10 +54,14 @@
       "description": "复现、报告、视频与复现材料"
     },
     "S_optional": {
-      "status": "not_started",
-      "description": "环境与专家数据生成设计已整理；实现未开始，主线节余才启动",
+      "status": "in_progress",
+      "description": "用户明确启动；场景/物理专家/回放/导出原型已实现，双视角数据检查中；真实契约未验证",
       "design_evidence": [
         "docs/仿真环境与专家数据生成方案.md"
+      ],
+      "implementation_evidence": [
+        "docs/仿真实施记录.md",
+        "sim/washstand/scene_config.json"
       ]
     }
   },
