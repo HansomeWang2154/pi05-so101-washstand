@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-17",
+  "scope": "G0 USB camera debugging only; no robot connection or motor commands by agent",
+  "issue": "ISSUE-018",
+  "user_reported_teleoperation": "without cameras succeeded; pasted log includes follower disconnect at 16:24:44",
+  "camera_roles": {
+    "top": "user confirmed discovered video2",
+    "wrist": "user confirmed discovered video4"
+  },
+  "camera_settings": {
+    "resolution": [640, 480],
+    "requested_fps": 30,
+    "backend": "V4L2 (200)",
+    "top_actual_fourcc": "YUYV",
+    "wrist_actual_fourcc": "MJPG",
+    "stable_device_paths": "saved in ignored configs/local.json; recheck after reconnect"
+  },
+  "simultaneous_camera_test": {
+    "target_duration_s": 10,
+    "top_read_completions": 125,
+    "top_host_read_completion_rate_hz": 12.488000248092355,
+    "wrist_read_completions": 200,
+    "wrist_host_read_completion_rate_hz": 19.980800396947767,
+    "top_interval_p95_ms": 80.6844689996069,
+    "wrist_interval_p95_ms": 52.38366599951405,
+    "both_cameras_released": true,
+    "note": "Host read completion timestamps, not exposure timestamps or a hardware sync measurement. Requested/reported 30fps is not measured 30fps."
+  },
+  "black_image": {
+    "user_confirmed_lens_cover_or_obstruction": true,
+    "user_reported_cover_removed": true,
+    "visible_images_after_removal": true,
+    "backend_as_black_image_root_cause": "not established; cover and backend were not independently controlled"
+  },
+  "temporary_manual_exposure_test": {
+    "exposure_auto_mode": 1,
+    "absolute_exposure": 100,
+    "top_host_read_completion_rate_hz": 22.59303872487496,
+    "wrist_host_read_completion_rate_hz": 20.22573053555175,
+    "restored_original_auto_mode": 3,
+    "restored_original_absolute_value": 313,
+    "conclusion": "Top rate improved but image darkened; both cameras did not achieve 30Hz. Original controls restored; no frozen collection exposure profile."
+  },
+  "visualization": {
+    "installed_package": "rerun-sdk==0.33.1",
+    "existing_packages_changed": {},
+    "existing_packages_removed": {},
+    "two_image_logging_and_rrd_write": "passed",
+    "native_binary_version_command_exit_code": 0,
+    "live_viewer_window": "not verified"
+  },
+  "calibration_files": "Both expected files exist with six joint entries; hashes archived locally. This is not a new physical direction/range validation.",
+  "remaining": [
+    "camera mounting, unmirrored orientation, workspace coverage and wrist focus",
+    "stable measured camera rates and exposure/USB investigation",
+    "combined camera + robot + viewer teleoperation in user terminal",
+    "measured six-dimensional action and timing contract",
+    "G1 real pilot recording and full QA"
+  ],
+  "evidence_root": "outputs/real/real_20261017_162848_camera_debug/",
+  "report": "docs/双相机遥操作调试记录_2026-10-17.md"
+}
