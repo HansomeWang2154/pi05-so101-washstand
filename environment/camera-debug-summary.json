@@ -98,11 +98,31 @@
   "evidence_root": "outputs/real/real_20261017_162848_camera_debug/",
   "report": "docs/双相机遥操作调试记录_2026-10-17.md",
   "latest_device_metadata_check": {
-    "local_time": "2026-10-17 17:03:55",
-    "known_serial_and_usb_camera_nodes_present": false,
-    "launcher_metadata_guard": "refused before robot startup on missing device",
-    "type_parse": "passed; raw display false compression flag and original YUYV/MJPG confirmed",
+    "local_time": "2026-10-17 22:05:46",
+    "known_serial_and_usb_camera_nodes_present": true,
+    "serial_read_write_in_old_session": false,
+    "account_has_dialout": true,
+    "old_session_has_dialout": false,
+    "temporary_serial_acl_missing_after_reconnect": true,
+    "camera_read_write": true,
+    "camera_numeric_indices_changed": true,
+    "stable_aliases_match_prior_identities": true,
+    "old_session_check_only_exit": 2,
+    "existing_dialout_group_child_check_only_exit": 0,
+    "permissions_changed": false,
     "hardware_opened": false,
-    "next": "reconnect and verify device identity, paths and permissions before real retest"
-  }
+    "issue": "ISSUE-003",
+    "next": "refresh user terminal group session with newgrp or fresh desktop login, then activate lerobot and retry; no repeated usermod needed",
+    "evidence_root": "outputs/real/real_20261017_220546_serial_permission_recurrence/"
+  },
+  "device_metadata_history": [
+    {
+      "local_time": "2026-10-17 17:03:55",
+      "known_serial_and_usb_camera_nodes_present": false,
+      "launcher_metadata_guard": "refused before robot startup on missing device",
+      "type_parse": "passed; raw display false compression flag and original YUYV/MJPG confirmed",
+      "hardware_opened": false,
+      "next": "reconnect and verify device identity, paths and permissions before real retest"
+    }
+  ]
 }

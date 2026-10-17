@@ -34,7 +34,7 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "16:42四设备运行14.7秒/29.92Hz后拉脱腕相机线；重接后用户确认跟随正常但Rerun无响应；JPEG显示路径最小对照已定位，关闭显示压缩的300次回放绕过通过（目标30Hz，总耗时11.00秒含结束等待），修改后实机待重试；17:03:55四设备节点不可见，预检阻止启动，待现场重接核对",
+      "latest_user_attempt": "22:05用户可见串口但预检拒绝；22:03重插清掉临时ACL，账户仍有dialout而旧会话未刷新。旧会话CHECK_ONLY退出2，使用已有dialout组的临时子进程退出0，四设备元数据通过；用户原终端newgrp后带相机实际重试待反馈，未打开设备",
       "camera_debug_evidence": "environment/camera-debug-summary.json",
       "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
@@ -46,7 +46,8 @@
         "用户16:15:57日志确认leader连接后进入校准；后续用户报告遥操作成功，两份对应校准文件已归档",
         "用户确认top/wrist身份；相机独占短测可取帧，实测帧率低于请求值；Rerun依赖与双图片记录通过",
         "用户带相机日志确认四设备连接和14.7秒控制循环；腕相机物理断连与内核记录吻合，走线及异常收尾仍待验",
-        "Rerun JPEG显示路径最小对照可触发卡住；关闭显示压缩的保存真实双图和目标30Hz/300次回放（总耗时11.00秒含结束等待），两次窗口截图响应通过；不是真实相机帧率或机械臂运行验证"
+        "Rerun JPEG显示路径最小对照可触发卡住；关闭显示压缩的保存真实双图和目标30Hz/300次回放（总耗时11.00秒含结束等待），两次窗口截图响应通过；不是真实相机帧率或机械臂运行验证",
+        "22:05重接后四节点存在；旧会话串口无rw，账户仍含dialout；使用已有组的临时子进程仅CHECK_ONLY退出0，未改ACL/权限或打开硬件"
       ],
       "rerun_debug_report": "docs/Rerun无响应调试报告_2026-10-17.md"
     },
@@ -108,7 +109,7 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "最新检查四设备节点不可见；现场重新连接后核对已知身份、路径与读写权限，不直接假定编号不变",
+    "在原遥操作终端单独newgrp dialout或完整注销重新登录，确认新会话组后激活lerobot；更新脚本先检查设备权限再现场重试，无需重复usermod",
     "先检查腕相机线材/连接器，设置腕部/臂身/底座应力释放和活动余量，再验证完整运动路径不拉线",
     "用户先支稳退出控制并关闭旧无响应viewer，再用关闭显示压缩的更新脚本小幅重试；设备占用时不独立取帧，之后再安排相机稳定复测",
     "处理ISSUE-019异常资源清理缺陷，保留关力矩失败证据，不能以关闭力矩释放功能掩盖",
@@ -135,10 +136,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "重接后用户确认跟随正常、Rerun无响应；已用保存图片定位JPEG显示触发条件并验证原始显示绕过；修改后真实重试待用户现场执行，agent未连接机械臂",
+    "real_conversation_status": "串口重插后临时ACL消失、旧组会话预检失败；已有dialout组子进程CHECK_ONLY通过，用户原终端待刷新后重试；无agent硬件连接",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "physical cable pull/reconnect and teardown audit, launcher device metadata guard; saved-image Rerun compressed/raw comparison and responsive streaming test; no agent hardware control or external framework changes",
+    "last_update_scope": "read-only device/group/ACL recurrence evidence; clearer local launcher preflight; existing-group child CHECK_ONLY comparison; no hardware connection or permission mutation",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
