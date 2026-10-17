@@ -1,0 +1,234 @@
+--- /dev/null
++++ b/src/lerobot/utils/cleanup.py
+@@ -0,0 +1,23 @@
++# Copyright 2026 The HuggingFace Inc. team. All rights reserved.
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may obtain a copy at http://www.apache.org/licenses/LICENSE-2.0
++
++from collections.abc import Callable, Iterable
++
++
++def run_cleanup(actions: Iterable[tuple[str, Callable[[], None]]]) -> None:
++    """Attempt every cleanup action, then report every failure.
++
++    Cleanup can release motor torque: a failed action must remain visible, but
++    must not prevent later motors, ports or camera threads from being released.
++    """
++    errors: list[BaseException] = []
++    for name, action in actions:
++        try:
++            action()
++        except BaseException as error:
++            # Even an interrupt during cleanup must not skip remaining resources.
++            error.add_note(f"Cleanup action: {name}")
++            errors.append(error)
++    if errors:
++        raise BaseExceptionGroup("One or more cleanup actions failed", errors)
+--- a/src/lerobot/motors/motors_bus.py
++++ b/src/lerobot/motors/motors_bus.py
+@@ -28,7 +28,7 @@
+ from contextlib import contextmanager
+ from dataclasses import dataclass
+ from enum import Enum
+-from functools import cached_property
++from functools import cached_property, partial
+ from pprint import pformat
+ from typing import TYPE_CHECKING, Protocol
+
+@@ -46,6 +46,7 @@
+ else:
+     DeepDiff = None  # type: ignore[assignment, misc]
+
++from lerobot.utils.cleanup import run_cleanup
+ from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+ from lerobot.utils.utils import enter_pressed, move_cursor_up
+
+@@ -553,12 +554,18 @@
+                 after disconnect.
+         """
+
++        actions = []
+         if disable_torque:
+-            self.port_handler.clearPort()
+             self.port_handler.is_using = False
+-            self.disable_torque(num_retry=5)
+-
+-        self.port_handler.closePort()
++            actions.append(("clear serial buffer", self.port_handler.clearPort))
++            # Keep failures local to each motor. Calibration/configuration still
++            # use the original disable_torque behavior.
++            for motor in self.motors:
++                actions.append(
++                    (f"disable torque: {motor}", partial(self.disable_torque, motors=motor, num_retry=5))
++                )
++        actions.append(("close serial port", self.port_handler.closePort))
++        run_cleanup(actions)
+         logger.debug(f"{self.__class__.__name__} disconnected.")
+
+     @classmethod
+@@ -1093,7 +1100,7 @@
+
+         int_value = self._encode_sign(data_name, {id_: int_value})[id_]
+
+-        err_msg = f"Failed to write '{data_name}' on {id_=} with '{int_value}' after {num_retry + 1} tries."
++        err_msg = f"Failed to write '{data_name}' on {id_=} with '{int_value}'."
+         self._write(addr, length, id_, int_value, num_retry=num_retry, raise_on_error=True, err_msg=err_msg)
+
+     def _write(
+@@ -1117,10 +1124,17 @@
+                 + self.packet_handler.getTxRxResult(comm)
+             )
+
+-        if not self._is_comm_success(comm) and raise_on_error:
+-            raise ConnectionError(f"{err_msg} {self.packet_handler.getTxRxResult(comm)}")
+-        elif self._is_error(error) and raise_on_error:
+-            raise RuntimeError(f"{err_msg} {self.packet_handler.getRxPacketError(error)}")
++        if raise_on_error:
++            details = (
++                f"port={self.port!r}, motor_id={motor_id}, addr={addr}, length={length}, value={value}, "
++                f"comm={comm}, error={error} (0x{error:02x}), "
++                f"actual_attempts={n_try + 1}, max_attempts={num_retry + 1}"
++            )
++            if not self._is_comm_success(comm):
++                raise ConnectionError(f"{err_msg} {details}; {self.packet_handler.getTxRxResult(comm)}")
++            elif self._is_error(error):
++                error_text = self.packet_handler.getRxPacketError(error) or "unmapped device status"
++                raise RuntimeError(f"{err_msg} {details}; {error_text}")
+
+         return comm, error
+
+--- a/src/lerobot/robots/so_follower/so_follower.py
++++ b/src/lerobot/robots/so_follower/so_follower.py
+@@ -16,7 +16,7 @@
+
+ import logging
+ import time
+-from functools import cached_property
++from functools import cached_property, partial
+
+ from lerobot.cameras import make_cameras_from_configs
+ from lerobot.lerobot_types import RobotAction, RobotObservation
+@@ -25,6 +25,7 @@
+     FeetechMotorsBus,
+     OperatingMode,
+ )
++from lerobot.utils.cleanup import run_cleanup
+ from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
+
+ from ..robot import Robot
+@@ -229,12 +230,18 @@
+         self.bus.sync_write("Goal_Position", goal_pos)
+         return {f"{motor}.pos": val for motor, val in goal_pos.items()}
+
+-    @check_if_not_connected
+-    def disconnect(self):
+-        self.bus.disconnect(self.config.disable_torque_on_disconnect)
+-        for cam in self.cameras.values():
+-            cam.disconnect()
+-
++    def disconnect(self) -> None:
++        # The composite is_connected flag is false after a partial connection or
++        # a camera failure. Clean up each owned resource independently instead.
++        actions = []
++        if self.bus.is_connected:
++            actions.append(
++                ("follower motor bus", partial(self.bus.disconnect, self.config.disable_torque_on_disconnect))
++            )
++        for name, cam in self.cameras.items():
++            if cam.is_connected or getattr(cam, "thread", None) is not None:
++                actions.append((f"follower camera: {name}", cam.disconnect))
++        run_cleanup(actions)
+         logger.info(f"{self} disconnected.")
+
+
+--- a/src/lerobot/scripts/lerobot_teleoperate.py
++++ b/src/lerobot/scripts/lerobot_teleoperate.py
+@@ -72,6 +72,7 @@
+ import logging
+ import time
+ from dataclasses import asdict, dataclass
++from functools import partial
+ from pprint import pformat
+
+ from lerobot.cameras.opencv import OpenCVCameraConfig  # noqa: F401
+@@ -121,6 +122,7 @@
+     so_leader,
+     unitree_g1,
+ )
++from lerobot.utils.cleanup import run_cleanup
+ from lerobot.utils.cycle_timer import CycleTimer
+ from lerobot.utils.import_utils import register_third_party_plugins
+ from lerobot.utils.utils import init_logging, move_cursor_up
+@@ -253,24 +255,25 @@
+ def teleoperate(cfg: TeleoperateConfig):
+     init_logging()
+     logging.info(pformat(asdict(cfg)))
+-    if cfg.display_data:
+-        init_visualization(
+-            cfg.display_mode, session_name="teleoperation", ip=cfg.display_ip, port=cfg.display_port
++    teleop = None
++    robot = None
++    primary_error = None
++    try:
++        if cfg.display_data:
++            init_visualization(
++                cfg.display_mode, session_name="teleoperation", ip=cfg.display_ip, port=cfg.display_port
++            )
++        display_compressed_images = (
++            True
++            if (cfg.display_data and cfg.display_ip is not None and cfg.display_port is not None)
++            else cfg.display_compressed_images
+         )
+-    display_compressed_images = (
+-        True
+-        if (cfg.display_data and cfg.display_ip is not None and cfg.display_port is not None)
+-        else cfg.display_compressed_images
+-    )
+-
+-    teleop = make_teleoperator_from_config(cfg.teleop)
+-    robot = make_robot_from_config(cfg.robot)
+-    teleop_action_processor, robot_action_processor, robot_observation_processor = make_default_processors()
+-
+-    teleop.connect()
+-    robot.connect()
+-
+-    try:
++        teleop = make_teleoperator_from_config(cfg.teleop)
++        robot = make_robot_from_config(cfg.robot)
++        teleop_action_processor, robot_action_processor, robot_observation_processor = make_default_processors()
++        teleop.connect()
++        robot.connect()
++
+         teleop_loop(
+             teleop=teleop,
+             robot=robot,
+@@ -285,11 +288,26 @@
+         )
+     except KeyboardInterrupt:
+         pass
++    except BaseException as error:
++        primary_error = error
++        raise
+     finally:
++        actions = []
++        # Release the follower first, including after partial connect failure.
++        if robot is not None:
++            actions.append(("robot", robot.disconnect))
++        if teleop is not None and teleop.is_connected:
++            actions.append(("teleoperator", teleop.disconnect))
+         if cfg.display_data:
+-            shutdown_visualization(cfg.display_mode)
+-        teleop.disconnect()
+-        robot.disconnect()
++            actions.append(("visualization", partial(shutdown_visualization, cfg.display_mode)))
++        try:
++            run_cleanup(actions)
++        except BaseException as cleanup_error:
++            if primary_error is not None:
++                raise BaseExceptionGroup(
++                    "Teleoperation and cleanup both failed", [primary_error, cleanup_error]
++                ) from None
++            raise
+
+
+ def main():

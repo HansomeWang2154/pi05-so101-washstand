@@ -88,7 +88,7 @@
   },
   "remaining": [
     "wrist cable strain relief and motion-range routing validation",
-    "independent exception-resilient cleanup of serial/camera resources; ISSUE-019",
+    "real verification of applied per-motor/serial/camera cleanup patch and raw motor-status diagnostics; ISSUE-019",
     "camera mounting, unmirrored orientation, workspace coverage and wrist focus",
     "stable measured camera rates and exposure/USB investigation",
     "clean Ctrl+C shutdown after follower id2 torque-disable failure; raw-image live display user-confirmed, underlying JPEG display trigger unresolved",
@@ -152,7 +152,8 @@
       "exception": "RuntimeError in device-error branch",
       "native_abort": true,
       "raw_error_detail": "unknown",
-      "all_motor_torque_off_verified": false
+      "all_motor_torque_off_verified": false,
+      "user_confirms_downstream_joints_remain_locked": true
     },
     "other_messages": {
       "grpc_proxy": "INFO bounded historical/static cache eviction; no dataset loss proven",
@@ -163,5 +164,14 @@
     "real_episodes_recorded": false,
     "agent_hardware_access": false,
     "evidence_root": "outputs/real/real_20261017_221308_teleop_review/"
+  },
+  "shutdown_cleanup_followup": {
+    "summary": "environment/shutdown-cleanup-summary.json",
+    "patch_applied": true,
+    "offline_fault_injection_tests_passed": 16,
+    "real_torque_off_verified": false,
+    "motor_error_root_cause": "unknown",
+    "native_abort_resolved": false,
+    "agent_hardware_access": false
   }
 }

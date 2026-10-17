@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-17",
+  "issue": "ISSUE-019",
+  "report": "docs/SO101退出锁力与异常清理修复_2026-10-17.md",
+  "user_feedback": "After the 22:17 shutdown failure, joints downstream of the shoulder remain locked; follower previously reported supported.",
+  "cause_confirmed": "Sequential cleanup stopped at motor id2 shoulder_lift Torque_Enable=0 error, skipping later motor attempts and explicit serial/camera cleanup.",
+  "motor_status_root_cause": "unknown; original raw status byte unavailable; SDK unmapped bits can produce empty descriptions",
+  "runtime": {
+    "name": "lerobot",
+    "version": "0.6.2",
+    "base_commit": "d6039b8376a3ee099a6f0f64c1bb8599ca743ae3",
+    "patch_applied": true,
+    "patch_path": "patches/lerobot/0001-best-effort-so101-shutdown.patch",
+    "patch_sha256": "73da8174924102370e06dc31d21c443d37e811da191005aa6d9d3726bdea970d",
+    "preexisting_act_change_preserved_by_hash": true,
+    "external_change_committed_in_external_repo": false
+  },
+  "changes": [
+    "per-motor disconnect attempts followed by serial close, retaining all errors",
+    "independent SOFollower bus/camera cleanup including partial connections and residual OpenCV threads",
+    "protected teleoperate connection and ordered robot/leader/viewer cleanup; primary and cleanup errors retained",
+    "raw comm/error and actual/max attempts in write failures; no new retries or error suppression"
+  ],
+  "validation": {
+    "staged_source_fault_injection_tests_passed": 16,
+    "applied_source_fault_injection_tests_passed": 16,
+    "teleoperate_help_exit_code": 0,
+    "project_tests_passed": 39,
+    "config_valid": true,
+    "config_complete": false,
+    "config_missing": [
+      "data.repo_id"
+    ],
+    "hardware_test_performed": false,
+    "agent_hardware_access": false,
+    "motor_commands_sent": false
+  },
+  "limits": [
+    "actual torque-off not verified; failing or unreachable motor may remain energized",
+    "underlying motor status and native abort cause unresolved",
+    "record entry-point top-level finalization/partial-connect cleanup not changed; verify before G1",
+    "forced process termination and power/communication failure cannot guarantee software cleanup"
+  ],
+  "evidence_root": "outputs/real/real_20261017_shutdown_cleanup_fix/",
+  "next": "User-supported short teleoperation and Ctrl+C test with complete raw error log; retain power-off fallback; G0 incomplete and G1 not started"
+}
