@@ -39,6 +39,7 @@ def source_entry(episode, episode_index):
         "expert_version": meta.get("expert_version"), "config": meta.get("config"),
         "metadata_maintenance": meta.get("metadata_maintenance"),
         "replay_validator_sha256": meta.get("replay_validator_sha256"),
+        "replay_code_sha256": meta.get("replay_code_sha256"),
         "frame_count": meta["frame_count"], "evidence_kind": meta.get("evidence_kind"),
     }
 

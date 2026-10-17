@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+from pathlib import Path
 
 import numpy as np
 
@@ -12,13 +14,21 @@ from .recording import load_episode, validate_episode, write_json
 from .validators import SuccessValidator
 
 
+def replay_provenance():
+    """Record the checker actually used, independently of the recording commit."""
+    root = Path(__file__).resolve().parent
+    return {"replay_validator_sha256": hashlib.sha256((root / "validators.py").read_bytes()).hexdigest(),
+            "replay_code_sha256": hashlib.sha256((root / "replay.py").read_bytes()).hexdigest()}
+
+
 def replay_episode(path, *, update_metadata=True, tolerance=2e-5):
     episode = load_episode(path)
     meta, arrays = episode["metadata"], episode["arrays"]
     errors = []
     data_errors = validate_episode(episode, check_videos=False)
     if data_errors:
-        result = {"replay_passed": False, "replay_errors": ["Invalid saved data: "+error for error in data_errors]}
+        result = {**replay_provenance(), "replay_passed": False,
+                  "replay_errors": ["Invalid saved data: "+error for error in data_errors]}
         if update_metadata:
             meta.update(result)
             write_json(episode["root"] / "metadata.json", meta)
@@ -60,7 +70,7 @@ def replay_episode(path, *, update_metadata=True, tolerance=2e-5):
             check = checker.update()
         if not check.get("success"):
             errors.append("Independent final physical success check failed")
-    result = {"replay_passed": not errors, "replay_max_qpos_error": maximum_error,
+    result = {**replay_provenance(), "replay_passed": not errors, "replay_max_qpos_error": maximum_error,
               "replay_max_state_error": maximum_state_error,
               "replay_max_qvel_error": maximum_velocity_error,
               "replay_tolerance": tolerance, "replay_errors": errors,

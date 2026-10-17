@@ -216,7 +216,8 @@ class SuccessValidator:
     Time accumulates from MuJoCo's simulation clock, not call count or wall
     time. Any invalid sample resets the stability window. ``success`` is not
     sticky: dropping the brush on the next step revokes it. Numeric errors are
-    sticky until reset. Call at least once every control step. The environment
+    sticky until reset, as are wrong-container/object and cup-movement faults.
+    Both cups are checked. Call at least once every control step. The environment
     preserves penetration peaks at every physics substep; MuJoCo preserves
     numeric warning counts between these control-rate checks.
     """
@@ -242,6 +243,7 @@ class SuccessValidator:
         self._stable_frames = 0
         self._numeric_error = False
         self._physics_error = False
+        self._terminal_faults = set()
         self._cup_initial = {name: self.env.data.xpos[self.env.cup_body(name)].copy()
                              for name in ("left", "right")}
         self._warning_baseline = {name: int(self.env.data.warning[int(getattr(mujoco.mjtWarning, name))].number)
@@ -283,18 +285,30 @@ class SuccessValidator:
             wrong_cup = "right" if self.cup == "left" else "left"
             if self._geometry(self.brush, wrong_cup)["inserted"]:
                 reasons.insert(0, "wrong_cup")
+                self._terminal_faults.add("wrong_cup")
             wrong_brush = "blue" if self.brush == "red" else "red"
             if any(self._geometry(wrong_brush, cup)["inserted"] for cup in ("left", "right")):
                 reasons.insert(0, "wrong_object_stored")
+                self._terminal_faults.add("wrong_object_stored")
             body, cup_id = env.brush_body(self.brush), env.cup_body(self.cup)
             cup_rotation = env.data.xmat[cup_id].reshape(3, 3)
             tilt = math.acos(float(np.clip(cup_rotation[2, 2], -1, 1)))
             translation = float(np.linalg.norm(env.data.xpos[cup_id] - self._cup_initial[self.cup]))
             details.update(cup_tilt_rad=tilt, cup_translation_m=translation)
-            if tilt > t.maximum_cup_tilt_rad:
-                reasons.append("cup_tipped")
-            if translation > t.maximum_cup_translation:
-                reasons.append("cup_moved")
+            # Both cups belong to the task. A wrong cup knocked over, or a
+            # terminal mistake later recovered, must not become a success.
+            cup_states = {}
+            for name in ("left", "right"):
+                other_id = env.cup_body(name)
+                other_rotation = env.data.xmat[other_id].reshape(3, 3)
+                other_tilt = math.acos(float(np.clip(other_rotation[2, 2], -1, 1)))
+                other_translation = float(np.linalg.norm(env.data.xpos[other_id]-self._cup_initial[name]))
+                cup_states[name] = {"tilt_rad": other_tilt, "translation_m": other_translation}
+                if other_tilt > t.maximum_cup_tilt_rad:
+                    self._terminal_faults.add("cup_tipped")
+                if other_translation > t.maximum_cup_translation:
+                    self._terminal_faults.add("cup_moved")
+            details["cup_states"] = cup_states
             contacts = contact_groups(env, self.brush)
             details["contacts"] = contacts
             gravity = float(np.linalg.norm(env.model.opt.gravity))
@@ -328,6 +342,8 @@ class SuccessValidator:
                     or speeds["cup_linear"] > t.maximum_cup_linear_speed
                     or speeds["cup_angular"] > t.maximum_cup_angular_speed):
                 reasons.append("unstable")
+        details["terminal_faults"] = sorted(self._terminal_faults)
+        reasons.extend(reason for reason in sorted(self._terminal_faults) if reason not in reasons)
         fresh_time = self._last_time is None or now > self._last_time + 1e-10
         if reasons:
             self._start_time = None

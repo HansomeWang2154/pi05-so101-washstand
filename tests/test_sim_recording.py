@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 from sim.washstand.export_lerobot import export_episodes, qualification_errors, source_entry
-from sim.washstand.inspect_dataset import expected_window_indices, preview_indices
+from sim.washstand.inspect_dataset import ImageComparison, expected_window_indices, preview_indices
 from sim.washstand.recording import EpisodeRecorder, load_episode, validate_episode
 
 
@@ -43,6 +43,50 @@ class InspectionReferenceTests(unittest.TestCase):
         self.assertEqual(entry["episode_index"], 2)
         self.assertEqual(entry["raw_path"], "/tmp/synthetic")
         self.assertNotIn("model_hash", entry)
+
+
+@unittest.skipUnless(HAS_NUMPY, "Optional simulation NumPy dependency not installed")
+class ImageComparisonTests(unittest.TestCase):
+    def test_small_reencoding_error_passes_and_aggregates_every_frame(self):
+        import numpy as np
+
+        comparison = ImageComparison()
+        raw = np.full((12, 16, 3), 100, dtype=np.uint8)
+        for error in (0, 2):
+            result = comparison.compare((raw.astype(np.float32) + error).transpose(2, 0, 1) / 255, raw)
+            self.assertTrue(result["passed"])
+        summary = comparison.summary()
+        self.assertEqual(summary["frames_compared"], 2)
+        self.assertEqual(summary["failed_frames"], 0)
+        self.assertAlmostEqual(summary["mean_frame_mae"], 1, places=4)
+        self.assertAlmostEqual(summary["mean_frame_rmse"], 1, places=4)
+        self.assertAlmostEqual(summary["maximum_frame_mae"], 2, places=4)
+        self.assertAlmostEqual(summary["maximum_frame_rmse"], 2, places=4)
+
+    def test_obvious_camera_substitution_and_moved_object_are_rejected(self):
+        import numpy as np
+
+        raw = np.full((32, 32, 3), 100, dtype=np.uint8)
+        raw[4:12, 4:12] = [255, 0, 0]
+        other_camera = np.full_like(raw, 230)
+        moved = np.full_like(raw, 100)
+        moved[20:28, 20:28] = [255, 0, 0]
+        for replacement in (other_camera, moved):
+            comparison = ImageComparison()
+            result = comparison.compare(replacement.transpose(2, 0, 1).astype(np.float32) / 255, raw)
+            self.assertFalse(result["passed"])
+            self.assertEqual(comparison.summary()["failed_frames"], 1)
+
+    def test_invalid_rgb_does_not_pass_through_nan_or_wrong_layout(self):
+        import numpy as np
+
+        raw = np.zeros((12, 16, 3), dtype=np.uint8)
+        comparison = ImageComparison()
+        for exported in (np.full((3, 12, 16), np.nan), np.zeros((12, 16, 3))):
+            with self.assertRaises(ValueError):
+                comparison.compare(exported, raw)
+        self.assertEqual(comparison.summary()["frames_compared"], 0)
+        self.assertFalse(comparison.summary()["passed"])
 
 
 @unittest.skipUnless(HAS_NUMPY, "Optional simulation NumPy dependency not installed")

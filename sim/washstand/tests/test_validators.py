@@ -149,6 +149,44 @@ class PhysicalValidatorTests(unittest.TestCase):
         self.assertFalse(health["ok"])
         self.assertIn("shoulder_pan", health["joint_limit_violations"])
 
+    def test_wrong_cup_tip_is_terminal_after_recovery(self):
+        self.drop_into()
+        self.assertTrue(self.advance()["success"])
+        body = self.env.cup_body("right")
+        original = self.env.data.xpos[body].copy()
+        self.place(body, original + [0, 0, .12], (math.sqrt(.5), math.sqrt(.5), 0, 0))
+        bad = self.validator.update()
+        self.assertFalse(bad["success"])
+        self.assertIn("cup_tipped", bad["reasons"])
+        self.place(body, original)
+        self.assertFalse(self.advance(90)["success"])
+        self.validator.reset()
+        self.assertTrue(self.advance(90)["success"])
+
+    def test_target_cup_movement_is_terminal_after_recovery(self):
+        self.drop_into()
+        self.assertTrue(self.advance()["success"])
+        body = self.env.cup_body("left")
+        original = self.env.data.xpos[body].copy()
+        self.place(body, original + [.1, 0, .25])
+        bad = self.validator.update()
+        self.assertFalse(bad["success"])
+        self.assertIn("cup_moved", bad["reasons"])
+        self.place(body, original)
+        self.assertFalse(self.advance(90)["success"])
+
+    def test_wrong_object_storage_is_terminal_after_removal(self):
+        self.drop_into()
+        self.assertTrue(self.advance()["success"])
+        body = self.env.brush_body("blue")
+        original = self.env.data.xpos[body].copy()
+        self.drop_into("right", "blue")
+        bad = self.advance(150)
+        self.assertFalse(bad["success"])
+        self.assertIn("wrong_object_stored", bad["reasons"])
+        self.place(body, original)
+        self.assertFalse(self.advance(90)["success"])
+
 
 if __name__ == "__main__":
     unittest.main()

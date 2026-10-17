@@ -33,9 +33,19 @@ HF_DATASETS_CACHE="$PWD/outputs/hf_datasets_cache" .venv/bin/python -m sim.washs
 
 可用 `--attempts 20 --jitter-m 0.002`做小范围位置变化；这仍是有限工作区的原型，不代表任意位置/朝向鲁棒。`--no-images`仅作快速物理调试，不能导出为带视觉的训练候选。
 
+录制中断后，在相同参数后追加 `--resume`。`--attempts`仍表示整个批次的总槽位数；已完成的成功或失败记录均跳过，未完成目录保留到批次内的 `interrupted/`，然后从该槽位重新录制。参数或有效配置不一致时拒绝继续；同一批次禁止并发录制。默认不加此参数时继续拒绝已有目录。
+
+```bash
+MUJOCO_GL=egl .venv/bin/python -m sim.washstand.generate \
+  --output data/sim/raw/my_jitter_run --attempts 20 --seed 200 \
+  --jitter-m 0.002 --resume
+```
+
+原始录制提交和后续校验源码哈希分别记录。仅修改检查器后重验，不会把原始录制提交改成新提交；跨代码修复恢复的批次可包含多个录制提交，需查看每条metadata/source_manifest。
+
 本工具会话检测到Mesa llvmpipe软件渲染，因此默认关闭阴影/反射提速；320×240原型图像和渲染设置写入元数据。这不是4060硬件性能实测。真实两路640×480设置应在单位/相机对齐阶段一起核验。
 
 `data/sim/` 和 `outputs/sim/` 被Git忽略，需另行保存。LeRobot导出标记 `robot_type=so101_sim`、`real_contract_verified=false`、`training_eligible=false`，表示尚不能直接拼接真实数据用于迁移训练。
 
-- [环境与专家数据生成设计](../docs/仿真环境与专家数据生成方案.md)：场景、控制、专家、校验、原始数据与导出模块的具体方案；其中目录是后续设计，尚未实现。
+- [环境与专家数据生成设计](../docs/仿真环境与专家数据生成方案.md)：原始设计；实际模块与设计差异以实施记录和代码为准。
 - [可选仿真与联合训练](../docs/可选仿真与联合训练.md)：启动条件、时间范围与 sim+real 对照原则。

@@ -13,7 +13,55 @@ import os
 from pathlib import Path
 import time
 
-from .recording import load_episode, write_json
+from .recording import iter_video_frames, load_episode, write_json
+
+
+class ImageComparison:
+    """Bounded-memory same-frame comparison allowing a second H.264 encode.
+
+    Errors use RGB values on the 0..255 scale. These prototype thresholds can
+    reject obvious image/camera substitutions; similar adjacent or static
+    images can still pass, so passing does not prove strict temporal identity.
+    NumPy is imported only when comparing, preserving lightweight imports.
+    """
+
+    def __init__(self, mae_threshold=3.0, rmse_threshold=6.0):
+        import math
+
+        if not all(math.isfinite(value) and value >= 0 for value in (mae_threshold, rmse_threshold)):
+            raise ValueError("Image thresholds must be finite and nonnegative")
+        self.mae_threshold, self.rmse_threshold = mae_threshold, rmse_threshold
+        self.frames = self.failed_frames = 0
+        self.mean_mae = self.mean_rmse = self.maximum_mae = self.maximum_rmse = 0.0
+
+    def compare(self, exported_chw, raw_hwc):
+        import numpy as np
+
+        exported = np.asarray(exported_chw)
+        raw = np.asarray(raw_hwc)
+        if (exported.ndim != 3 or raw.ndim != 3 or exported.shape[0] != 3
+                or raw.shape != (exported.shape[1], exported.shape[2], 3)
+                or raw.dtype != np.uint8 or not np.isfinite(exported).all()
+                or np.any(exported < 0) or np.any(exported > 1)):
+            raise ValueError("Expected finite CHW exported RGB in 0..1 and matching uint8 HWC raw RGB")
+        difference = exported.transpose(1, 2, 0).astype(np.float64) * 255 - raw.astype(np.float64)
+        mae = float(np.abs(difference).mean())
+        rmse = float(np.sqrt(np.square(difference).mean()))
+        passed = mae <= self.mae_threshold and rmse <= self.rmse_threshold
+        self.frames += 1
+        self.failed_frames += int(not passed)
+        self.mean_mae += (mae - self.mean_mae) / self.frames
+        self.mean_rmse += (rmse - self.mean_rmse) / self.frames
+        self.maximum_mae = max(self.maximum_mae, mae)
+        self.maximum_rmse = max(self.maximum_rmse, rmse)
+        return {"mae": mae, "rmse": rmse, "passed": passed}
+
+    def summary(self):
+        return {"frames_compared": self.frames, "failed_frames": self.failed_frames,
+                "mean_frame_mae": self.mean_mae, "maximum_frame_mae": self.maximum_mae,
+                "mean_frame_rmse": self.mean_rmse, "maximum_frame_rmse": self.maximum_rmse,
+                "mae_threshold": self.mae_threshold, "rmse_threshold": self.rmse_threshold,
+                "pixel_scale": "RGB 0..255", "passed": self.frames > 0 and self.failed_frames == 0}
 
 
 def preview_indices(stages):
@@ -95,6 +143,8 @@ def inspect_dataset(dataset_root, output, *, repo_id=None, action_horizon=50):
         "model_loaded": False, "model_training_batch_verified": False,
         "real_contract_verified": False, "training_eligible": False,
         "visual_preview_created": False, "human_visual_reviewed": False,
+        "image_comparison_note": "Every exported frame is compared to the same indexed raw camera frame; "
+                                 "H.264 re-encoding tolerance does not prove strict temporal identity.",
     }
     def check(condition, message):
         if not condition and len(report["errors"]) < 100:
@@ -109,6 +159,7 @@ def inspect_dataset(dataset_root, output, *, repo_id=None, action_horizon=50):
     delta = {"action": [index / fps for index in range(action_horizon)],
              "observation.state": [-1 / fps, 0]}
     window_dataset = LeRobotDataset(repo_id, root=dataset_root, video_backend="pyav", delta_timestamps=delta)
+    image_totals = {camera: ImageComparison() for camera in ("top", "wrist")}
     absolute_start = 0
     for entry in manifest["episodes"]:
         episode_index = entry["episode_index"]
@@ -118,10 +169,13 @@ def inspect_dataset(dataset_root, output, *, repo_id=None, action_horizon=50):
         check(length == len(arrays["state"]), f"episode {episode_index}: raw length mismatch")
         check(fps == metadata["fps"], f"episode {episode_index}: fps mismatch")
         for field in ("xml_sha256", "asset_sha256", "project_commit", "working_tree_dirty",
-                      "expert_version", "scene_schema", "task_id", "group_id", "layout_id", "config"):
+                      "expert_version", "scene_schema", "task_id", "group_id", "layout_id", "config",
+                      "replay_validator_sha256", "replay_code_sha256"):
             check(entry.get(field) == metadata.get(field), f"episode {episode_index}: manifest {field} mismatch")
         selected = preview_indices(arrays["stage"])
         preview = {}
+        raw_videos = {camera: iter_video_frames(raw["root"] / f"{camera}.mp4") for camera in ("top", "wrist")}
+        image_comparisons = {camera: ImageComparison() for camera in ("top", "wrist")}
         max_state_error, max_action_error = 0.0, 0.0
         for frame_index in range(length):
             item = dataset[absolute_start + frame_index]
@@ -143,11 +197,21 @@ def inspect_dataset(dataset_root, output, *, repo_id=None, action_horizon=50):
                 check(rgb.shape == (3, metadata["height"], metadata["width"]), f"{prefix}: {camera} image shape")
                 check(np.isfinite(rgb).all() and rgb.min() >= 0 and rgb.max() <= 1,
                       f"{prefix}: invalid {camera} RGB values")
+                raw_rgb = next(raw_videos[camera], None)
+                check(raw_rgb is not None, f"{prefix}: missing raw {camera} frame")
+                if raw_rgb is not None:
+                    difference = image_comparisons[camera].compare(rgb, raw_rgb)
+                    image_totals[camera].compare(rgb, raw_rgb)
+                    check(difference["passed"], f"{prefix}: {camera} differs from same-index raw image "
+                          f"(MAE={difference['mae']:.4f}, RMSE={difference['rmse']:.4f} on 0..255 scale)")
                 if frame_index in selected:
                     sample[camera] = rgb.copy()
             if frame_index in selected:
                 preview[frame_index] = sample
             report["frames_checked"] += 1
+        for camera, video in raw_videos.items():
+            check(next(video, None) is None, f"episode {episode_index}: extra raw {camera} frames")
+            video.close()
         preview_path = output / f"episode-{episode_index:04d}-preview.jpg"
         _save_preview(preview_path, preview, metadata["instruction"])
         window_samples = sorted({0, min(1, length - 1), max(0, length - action_horizon), max(0, length - 2), length - 1})
@@ -166,10 +230,12 @@ def inspect_dataset(dataset_root, output, *, repo_id=None, action_horizon=50):
             "episode_index": episode_index, "frame_count": length, "task_id": metadata.get("task_id"),
             "instruction": metadata["instruction"], "group_id": metadata.get("group_id"),
             "raw_state_max_abs_error": max_state_error, "raw_action_max_abs_error": max_action_error,
+            "image_comparison": {camera: comparison.summary() for camera, comparison in image_comparisons.items()},
             "preview": str(preview_path), "preview_frames": {str(k): v for k, v in selected.items()},
             "window_samples_checked": window_samples,
         })
         absolute_start += length
+    report["image_comparison"] = {camera: comparison.summary() for camera, comparison in image_totals.items()}
     batch = next(iter(DataLoader(window_dataset, batch_size=min(2, len(window_dataset)), shuffle=False, num_workers=0)))
     report["data_loader_batch_shapes"] = {key: list(value.shape) for key, value in batch.items() if hasattr(value, "shape")}
     report["data_loader_batch_verified"] = True
