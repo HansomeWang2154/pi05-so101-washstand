@@ -1,5 +1,5 @@
 {
-  "updated_date": "2026-10-17",
+  "updated_date": "2026-10-18",
   "current_phase": "G0_hardware_environment_verification",
   "issue_log": "docs/问题记录.md",
   "simulation_design_doc": "docs/仿真环境与专家数据生成方案.md",
@@ -34,7 +34,7 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "22:59 red_left首条实际录制，Rerun同步发送阻塞132.156秒；保存1个episode/212帧、action完全恒定，排除训练。23:01:29四设备断开、进程0；用户确认支撑并退出，物理卸力仍未单独确认",
+      "latest_user_attempt": "2026-10-17 23:30不显示Rerun的red_left_trial03：1条730帧，控制29.94Hz/24.4秒，0/729工作超时，四设备正常断开；两路视频各730帧全量解码通过，仍有JPEG告警，任务成功/物理卸力待验",
       "camera_debug_evidence": "environment/camera-debug-summary.json",
       "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
@@ -54,21 +54,26 @@
       ],
       "rerun_debug_report": "docs/Rerun无响应调试报告_2026-10-17.md",
       "shutdown_cleanup_evidence": "environment/shutdown-cleanup-summary.json",
-      "shutdown_cleanup_status": "0001/0002清理补丁离线通过；首条实际录制四设备正常断开、进程0且无卸力异常，本轮未复发native abort；物理释放与底层历史舵机error仍待核验"
+      "shutdown_cleanup_status": "0001/0002清理补丁离线通过；首条实际录制四设备正常断开、进程0且无卸力异常，本轮未复发native abort；物理释放与底层历史舵机error仍待核验",
+      "latest_recording_evidence": "environment/trial03-recording-summary.json",
+      "calibration_coverage_review": "2026-10-18源码与本机两JSON核对：均六电机，手动范围仅五项，wrist_roll id5固定0～4095编码计数；不等于物理方向/范围验收"
     },
     "G1": {
       "status": "in_progress",
-      "description": "诊断试采已保存1条，QA排除，有效示范0条；未达10～20条目标",
-      "preparation_status": "新增固定record.sh，默认red_left单条/关闭实时显示，每次新建目录和日志；命令解析/语法/check-only通过；未启动新的实际录制",
+      "description": "已有2条真实录制：首条212帧排除，trial03的730帧候选通过文件完整性/数值初检；有效示范尚未验收",
+      "preparation_status": "用户按单行命令完成trial03，不显示Rerun绕过已获本轮24.4秒控制证据；完整任务/图像时序QA待验",
       "preparation_evidence": "environment/record-one-preparation-summary.json",
       "operation_guide": "docs/单条红牙刷左杯试采.md",
       "prepared_session_id": "real_20261017_230417_red_left_trial02_nodisplay",
-      "recorded_real_episodes": 1,
+      "recorded_real_episodes": 2,
       "accepted_real_demonstrations": 0,
       "excluded_real_episodes": 1,
       "qa_evidence": "environment/first-real-pilot-qa-summary.json",
       "launch_script": "scripts/record.sh",
-      "launcher_evidence": "environment/record-launcher-summary.json"
+      "launcher_evidence": "environment/record-launcher-summary.json",
+      "pending_qa_real_episodes": 1,
+      "latest_dataset": "data/real/red_left_trial03",
+      "latest_recording_evidence": "environment/trial03-recording-summary.json"
     },
     "G2": {
       "status": "pending",
@@ -124,8 +129,8 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "用户通过scripts/record.sh启动单条red_left复测，默认不显示Rerun但保留top/wrist视频；关闭其他控制/预览，支撑后q正常保存，保留旧失败数据",
-    "首条真实212帧已QA排除（132秒telemetry阻塞、action恒定）；第二条后复核完整抓放、真实循环时间、视频与数值、退出卸力，不能依赖名义30Hz或仅进程0",
+    "检查red_left_trial03完整抓取/入左杯/松爪撤离/稳定两秒及人工干预，确认图像动作时序和画面质量后再判训练资格",
+    "JPEG源解码告警仍未根治，核验腕相机对焦/新帧率与USB稳定性；继续关闭实时Rerun、保留双路录制",
     "单独验证Rerun显示降频/重复帧去重与代理缓存回收取舍，保留原始显示绕过，不直接改变控制频率",
     "保留JPEG解码告警完整上下文，独占验证发生频率、图像质量和USB稳定性；不要把残片当作本次退出崩溃根因",
     "继续核验腕相机走线活动余量与完整运动路径，当前4分钟循环不等同任务全过程验收",
@@ -155,7 +160,7 @@
     "real_conversation_status": "用户首条真实数据已保存并QA排除；已支撑并退出，未再接管硬件；准备不显示Rerun的第二条，待用户现场执行",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "Added reusable bash recording launcher from current local configuration; offline argv parse and metadata-only preflight; no device connection or additional real episode",
+    "last_update_scope": "2026-10-18 documented user trial03 and read-only730-frame dual-video/numeric checks; explained six-motor calibration vs five manual ranges using source and local JSON; no device access",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {

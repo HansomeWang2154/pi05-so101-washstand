@@ -1,0 +1,72 @@
+{
+  "review_date": "2026-10-18",
+  "run_date": "2026-10-17",
+  "dataset": "data/real/red_left_trial03",
+  "total_episodes": 1,
+  "total_frames": 730,
+  "tasks": [
+    {
+      "task_index": 0,
+      "task": "Put the red toothbrush into the left cup."
+    }
+  ],
+  "nominal_fps": 30,
+  "control_effective_hz": 29.94,
+  "measured_control_s": 24.4,
+  "over_budget": 0,
+  "judged_ticks": 729,
+  "work_mean_ms": 2.1,
+  "work_worst_ms": 2.7,
+  "cadence_slips": 1,
+  "source_jpeg_warning_present": true,
+  "display_data": false,
+  "software_disconnect_logged_for_all_four": true,
+  "physical_torque_release_confirmed": false,
+  "task_success_verified": false,
+  "training_eligibility": "pending_task_image_timing_QA",
+  "videos": {
+    "top": {
+      "decoded_frames": 730,
+      "decode_error": null,
+      "sha256": "d5b2994f139e42795eba807a457d778e04b22a24d4009f5cfbede4fb38f34fae"
+    },
+    "wrist": {
+      "decoded_frames": 730,
+      "decode_error": null,
+      "sha256": "cea55ed1bdf197976788aab12c4320a7aad44df9ecbda3596addf8be3454b275"
+    }
+  },
+  "numeric": {
+    "action": {
+      "shape": [
+        730,
+        6
+      ],
+      "finite": true,
+      "unique_rows": 430
+    },
+    "observation.state": {
+      "shape": [
+        730,
+        6
+      ],
+      "finite": true,
+      "unique_rows": 422
+    }
+  },
+  "calibration_review": {
+    "leader_entries": 6,
+    "follower_entries": 6,
+    "manual_range_count": 5,
+    "excluded_manual_range_joint": "wrist_roll",
+    "motor_id": 5,
+    "fixed_encoder_range": [
+      0,
+      4095
+    ],
+    "homing_offsets_include_all_six_by_source": true,
+    "physical_calibration_verified": false
+  },
+  "evidence_root": "outputs/real/real_20261018_trial03_update/",
+  "agent_hardware_access": false
+}
