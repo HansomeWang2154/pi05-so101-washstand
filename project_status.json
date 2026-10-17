@@ -6,8 +6,14 @@
   "version_control": {
     "system": "git",
     "default_branch": "main",
-    "remote_configured": false,
-    "workflow_doc": "docs/Git版本管理.md"
+    "remote_configured": true,
+    "workflow_doc": "docs/Git版本管理.md",
+    "remote_name": "origin",
+    "remote_url": "https://github.com/HansomeWang2154/pi05-so101-washstand.git",
+    "visibility": "public",
+    "tracking_branch": "origin/main",
+    "first_push_verified_date": "2026-10-17",
+    "first_push_verified_revision_alias": "local-revision-014"
   },
   "active_hours_recorded": null,
   "gpu_hours_recorded": 0,

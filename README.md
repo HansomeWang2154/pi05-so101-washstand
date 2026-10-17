@@ -67,7 +67,7 @@ make test
 
 ## 本地与云端的协作约定
 
-本项目在 `pi05-so101-washstand/` 内独立使用 Git，默认分支 `main`。每个完成的改动经检查后提交；数据、权重、本机配置及详细环境输出被忽略。当前远程仓库尚未配置，具体约定见 [Git版本管理](docs/Git版本管理.md)。
+本项目在 `pi05-so101-washstand/` 内独立使用 Git，默认分支 `main`，公开仓库为 [HansomeWang2154/pi05-so101-washstand](https://github.com/HansomeWang2154/pi05-so101-washstand)。2026-10-17已完成首次历史推送并核对远端提交，`main` 跟踪 `origin/main`。每个完成的改动经检查后提交；数据、权重、本机配置及详细环境输出被忽略，具体约定见 [Git版本管理](docs/Git版本管理.md)。
 
 - 本地保留代码、数据主副本、配置、日志和结果；云端作为可替换计算节点。
 - 代码用 Git 提交关联；视频/数据用增量同步；模型和训练状态单独存储。
