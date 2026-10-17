@@ -55,14 +55,22 @@
     },
     "S_optional": {
       "status": "in_progress",
-      "description": "用户明确启动；场景/物理专家/回放/导出已实现；正式微扰录制14条完成，中断后补续跑；真实契约未验证",
+      "description": "仿真数据管线原型v1已验收：20条/12177帧，物理回放、导出重读与CPU batch通过；真实对齐、训练统计和迁移对照未完成",
       "design_evidence": [
         "docs/仿真环境与专家数据生成方案.md"
       ],
       "implementation_evidence": [
         "docs/仿真实施记录.md",
+        "docs/数据卡_仿真原型v1.md",
+        "environment/simulation-v1-summary.json",
         "sim/washstand/scene_config.json"
-      ]
+      ],
+      "milestones": {
+        "scene_expert_data_v1": "completed",
+        "real_alignment": "pending",
+        "train_only_statistics": "pending",
+        "transfer_ablation": "pending"
+      }
     }
   },
   "confirmed_hardware": [

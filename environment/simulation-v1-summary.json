@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "dataset_version": "nominal_jitter_v1_20261017",
+  "scope": "MuJoCo SO101 scripted contact expert; finite nominal prototype; not real/model evaluation",
+  "versions": {
+    "python": "3.12.14",
+    "mujoco": "3.8.1",
+    "numpy": "2.2.6",
+    "scipy": "1.18.1",
+    "av": "15.1.0",
+    "Pillow": "12.3.0",
+    "lerobot": "0.6.2",
+    "torch": "2.11.0"
+  },
+  "all_recordings_clean": true,
+  "replay_provenance": {
+    "replay_validator_sha256": "2a788c109f2b2763d0ce775fe7ba152174e186b8f3b45f1886fac52c633f2e2b",
+    "replay_code_sha256": "64cc2aa43e603d4de7c0ef0549f06442d0a9fabc29694e5d34acd64d2b4a5311"
+  },
+  "source_robot_asset": {
+    "repository": "https://github.com/google-deepmind/mujoco_menagerie",
+    "upstream_path": "robotstudio_so101",
+    "commit": "0059d4335f8156206f63a35662313385f7ad6d74",
+    "license": "Apache-2.0"
+  },
+  "lerobot_runtime": {
+    "package_version": "0.6.2",
+    "commit": "d6039b8376a3ee099a6f0f64c1bb8599ca743ae3",
+    "working_tree_dirty": true,
+    "source_kind": "external editable dependency",
+    "modified_file_count": 1,
+    "untracked_file_count": 0,
+    "modified_dataset_paths": [],
+    "dataset_source_sha256": {
+      "src/lerobot/datasets/__init__.py": "a775fedd3152db2fd67408a748c282e32af4469850ec4a783df08b52e92282d1",
+      "src/lerobot/datasets/aggregate.py": "2da9e5473aef0a3d51466fdb8a3c2154a606959ed9f4c92ad2cd11b249d59498",
+      "src/lerobot/datasets/compute_stats.py": "32518cec77500b41a657dfd4d6f9d8e6aba6f5ac7db93a28293852e7ec415504",
+      "src/lerobot/datasets/dataset_metadata.py": "6f521ae70b89874027cbd0029b62da14f77958f551ded643b996b9a7db2b66df",
+      "src/lerobot/datasets/dataset_reader.py": "b3fae3e9974011e12346638cf89cb8af9b362088581051dd2f0c694e24046230",
+      "src/lerobot/datasets/dataset_tools.py": "369b9ded7ba51e74832b3240382ab370b520eabd80b92f14086feee0858fc3cf",
+      "src/lerobot/datasets/dataset_writer.py": "319f4efb53e892ceeb439aae6d25209d14564e3dc91134c7cc2c6c0b5e71ebc5",
+      "src/lerobot/datasets/depth_utils.py": "dbedec93aa7b8b11e093f1efa6bb0e5a34e283e20fc0314e8e58c66635aaf008",
+      "src/lerobot/datasets/factory.py": "bf3259f5e7ab4ff60bad8b1c33e07532e66da2ab5daeb1894edbe958fa215971",
+      "src/lerobot/datasets/feature_utils.py": "c73e79ec70d9bcf751b8604f709546219fa90fe7010ac9c4e882f863f18b41c2",
+      "src/lerobot/datasets/image_writer.py": "54cad218c99caad105ea8738507ee87fc8c2858832d31aa5b21d324c97360631",
+      "src/lerobot/datasets/io_utils.py": "af08c7875f34f8469f80c4fd903af12971d6fa96c179be984887b93ef2f6f91c",
+      "src/lerobot/datasets/lance_backend.py": "931fb1a9fe7b3409e6024e43b9a7aa74817be0508a4f23d0328cde8c1ee217fc",
+      "src/lerobot/datasets/lance_utils.py": "cc57c09a3e1bfa156662437b1aa72e37f0c99b2bee27bb9d98315449a908267d",
+      "src/lerobot/datasets/language.py": "251f09d150c7058c166b2caa7c8fb0983978ce1188fa955e397a69fe87750587",
+      "src/lerobot/datasets/language_render.py": "60f3c72939a6edce42f2a45c185ebe850740cd1d87f949092eb18f1dfa5e5224",
+      "src/lerobot/datasets/lerobot_dataset.py": "3bae0364eaaf83c282aa293776e3f91232ae0cf8f4bd2aa5b716f9b4268795b3",
+      "src/lerobot/datasets/multi_dataset.py": "e3aacab9b8b9e3dd1e38f54fc10a5dd10e3ebd9b9f537fcb3cbbc61dc839ff9d",
+      "src/lerobot/datasets/pipeline_features.py": "42a529bb0d25b9f74204101a472a96ba6b9f7133026c78cd99b6c5f1fd4d9f12",
+      "src/lerobot/datasets/pyav_utils.py": "d53792b446936f08527b598a89a65fc2ca5c002d9bb14e63015206dae5830023",
+      "src/lerobot/datasets/recipe.py": "5b61434db443de33e4e0f7e09e53cabd068529a7b6e4ad689d03332b90b42070",
+      "src/lerobot/datasets/sampler.py": "f715aaaa1118ef8901928f92975f7bc08bca412860f072bbcca84555303cc38e",
+      "src/lerobot/datasets/storage.py": "9f8b0f14047e8db1869022642799181c50369ed70d5f7191048d7a826afae85a",
+      "src/lerobot/datasets/streaming_dataset.py": "bb08cfec84407d019af806b55561e8e092980664b2c9487e55b44aaccbd62d0b",
+      "src/lerobot/datasets/utils.py": "b73f43e417d03d3d841ff3f1d1886961691ffe92155a51d7270fb75bed2ab409",
+      "src/lerobot/datasets/video_utils.py": "914ea27024506f3ba2b88904b91a8b7738e63cac8a889a682a46e3115f0bb4fc",
+      "src/lerobot/configs/video.py": "8575fd0baabbc1c35acb7491871e4b146b9981c92686f4bc95721079f038f079"
+    }
+  },
+  "counts": {
+    "completed_logical_attempts": 20,
+    "qualified_episodes": 20,
+    "system_interruptions": 1,
+    "total_execution_attempts": 21,
+    "frames": 12177,
+    "rgb_images": 24354,
+    "simulated_action_seconds": 405.9,
+    "layout_groups": 5,
+    "task_episodes": {
+      "red_left": 5,
+      "red_right": 5,
+      "blue_left": 5,
+      "blue_right": 5
+    }
+  },
+  "configuration": {
+    "fps": 30,
+    "rgb_shape_hwc": [
+      240,
+      320,
+      3
+    ],
+    "jitter_m": 0.002,
+    "action_state_shape": [
+      6
+    ],
+    "unit_contract": "native MuJoCo radians; real calibrated mapping unverified",
+    "source": "sim",
+    "robot_type": "so101_sim",
+    "render_backend": "Mesa llvmpipe CPU software; not a 4060 benchmark",
+    "object_grasp_binding": false,
+    "object_actuators": false
+  },
+  "generation_wall_seconds_reported": 1058.6499361800015,
+  "wall_time_note": "Sum of reported run segments; excludes unfinalized interrupted work and human/CPU debugging; not billed GPU time.",
+  "physics": {
+    "all_replay_passed": true,
+    "max_qpos_error": 0.0,
+    "max_state_error": 5.9594023715803246e-08,
+    "max_qvel_error": 0.0,
+    "minimum_final_stable_seconds": 2.7999999999974534,
+    "maximum_penetration_m": 0.0035422851093058596
+  },
+  "export": {
+    "format": "LeRobot v3",
+    "episodes": 20,
+    "rejected": 1,
+    "rejection_note": "Preserved interrupted attempt has no finalized trajectory and is excluded.",
+    "status": "complete",
+    "normalization_scope": "all 20 exported episodes; train-only statistics not prepared"
+  },
+  "split": {
+    "strategy": "whole initial-layout group",
+    "train_episodes": 16,
+    "validation_episodes": 4,
+    "statistics_train_only_verified": false
+  },
+  "pipeline_wall_times": {
+    "status": "complete",
+    "generation_wait_seconds": 70.00579702599498,
+    "export": {
+      "exit_code": 0,
+      "wall_seconds": 89.6296429590002
+    },
+    "inspection": {
+      "exit_code": 0,
+      "wall_seconds": 208.95697068500158
+    }
+  },
+  "inspection": {
+    "wall_seconds": 204.99871942699974,
+    "passed": true,
+    "frames_checked": 12177,
+    "window_samples_checked": 100,
+    "image_comparison": {
+      "top": {
+        "frames_compared": 12177,
+        "failed_frames": 0,
+        "mean_frame_mae": 1.6850277484792047,
+        "maximum_frame_mae": 2.035414075195309,
+        "mean_frame_rmse": 2.4405269120515287,
+        "maximum_frame_rmse": 3.711517641987137,
+        "mae_threshold": 3.0,
+        "rmse_threshold": 6.0,
+        "pixel_scale": "RGB 0..255",
+        "passed": true
+      },
+      "wrist": {
+        "frames_compared": 12177,
+        "failed_frames": 0,
+        "mean_frame_mae": 1.2288198648697806,
+        "maximum_frame_mae": 2.133425581614366,
+        "mean_frame_rmse": 1.9255625974195762,
+        "maximum_frame_rmse": 3.2206530630784913,
+        "mae_threshold": 3.0,
+        "rmse_threshold": 6.0,
+        "pixel_scale": "RGB 0..255",
+        "passed": true
+      }
+    },
+    "data_loader_batch_shapes": {
+      "observation.images.top": [
+        2,
+        3,
+        240,
+        320
+      ],
+      "observation.images.wrist": [
+        2,
+        3,
+        240,
+        320
+      ],
+      "observation.state": [
+        2,
+        2,
+        6
+      ],
+      "action": [
+        2,
+        50,
+        6
+      ],
+      "timestamp": [
+        2
+      ],
+      "frame_index": [
+        2
+      ],
+      "episode_index": [
+        2
+      ],
+      "index": [
+        2
+      ],
+      "task_index": [
+        2
+      ],
+      "action_is_pad": [
+        2,
+        50
+      ],
+      "observation.state_is_pad": [
+        2,
+        2
+      ]
+    },
+    "data_loader_batch_verified": true,
+    "model_loaded": false,
+    "model_training_batch_verified": false
+  },
+  "visual_review": {
+    "reviewed_attempts": 20,
+    "reviewed_rgb_keyframes": 200,
+    "full_video_manually_watched": false,
+    "notes": [
+      "All reviewed selected keyframes are visually consistent with the requested color and cup side.",
+      "The wrist camera sees the grasped head closely, then a large black empty-world region as it rotates away from the tabletop.",
+      "Objects, tabletop and arm have coarse nominal appearance; small jitter gives similar views across attempts.",
+      "No obvious gross interpenetration is visible in these selected frames, but depth occlusion and unsampled time remain unresolved.",
+      "Final brush poses are often tilted and may project nearly horizontally across a cup opening; this observation is preserved and is not a failure classification because the agreed task does not require vertical storage."
+    ]
+  },
+  "checks": {
+    "ordinary_unit_tests": {
+      "run": 39,
+      "passed": 39
+    },
+    "optional_simulation_tests": {
+      "run": 48,
+      "passed": 48
+    },
+    "configuration_structurally_valid": true,
+    "real_device_configuration_complete": false
+  },
+  "data_paths": {
+    "raw": "data/sim/raw/nominal_jitter_v1_20261017",
+    "lerobot": "data/sim/lerobot/nominal_jitter_v1_20261017",
+    "preview": "outputs/sim/nominal_jitter_v1_20261017_preview.mp4"
+  },
+  "evidence_sha256": {
+    "data/sim/raw/nominal_jitter_v1_20261017/summary.json": "886d88c8038c139f2a3a800f2df5ca70c37b4be837b610f7d3f32708d0574ed4",
+    "data/sim/raw/nominal_jitter_v1_20261017/effective_config.json": "1ad6b7e892f0fe41748f0c30cea7d091ba86f9c57daa5c21cfe54820c5e328f7",
+    "data/sim/raw/nominal_jitter_v1_20261017/run_config.json": "1866c7cf7abb9e621a9c47e9b305b93152ffc06960e6a112a7a6516c56bfabdb",
+    "data/sim/lerobot/nominal_jitter_v1_20261017/source_manifest.json": "49c3ae93c3f97686e645675da71928287f6587017e07e60da5854a638255e5af",
+    "outputs/sim/nominal_jitter_v1_20261017_dataset_inspection/inspection.json": "f3e8b2c9811c49e553c0ba73c2b5f30ced91edb05419affaf1477dba69403986",
+    "outputs/sim/jitter_visual_review/visual_review.json": "275d9f3b9c56fc72c9b9cdbb8504a2100b2b65e9c1a95ce5e954deda762c6cca",
+    "outputs/sim/nominal_jitter_v1_20261017_checksums.json": "22e22413192d3cff4a2599e40241b816b538827eeff355e05cd95cb030986b4e",
+    "outputs/sim/nominal_jitter_v1_20261017_revalidation.json": "ce88513c6ee9af4a573f6e06236cca27c768bbf253dbd0ffe26fc14d98aab281",
+    "outputs/sim/nominal_jitter_v1_20261017_pipeline_run.json": "dc496fb1f16ef43526c23c671d32172910432502398e50526ecb31b0feb3e533",
+    "data/sim/manifests/nominal_jitter_v1_20261017-episodes.json": "a4805fe549564c568429c1ba1119c1bf729f963cb19a5ad8c890eb382fd16575",
+    "data/sim/manifests/nominal_jitter_v1_20261017-split.json": "d6789081c194f546d3ab96624f4e617aa4b32aa66ad4f8fc2fd8bb9825c5d790"
+  },
+  "real_contract_verified": false,
+  "training_eligible": false,
+  "train_only_statistics_verified": false,
+  "real_robot_run": false,
+  "model_loaded": false,
+  "training_performed": false,
+  "cloud_instance_started": false,
+  "upload_performed": false,
+  "limitations": [
+    "5 layouts with +/-2mm position jitter only; no broad robustness claim",
+    "nominal object/robot/camera parameters not measured or calibrated to real setup",
+    "coarse appearance and black wrist background are a substantial visual domain gap",
+    "success allows leaning supported brushes; does not require upright pose",
+    "lossy image similarity does not strictly prove temporal identity",
+    "LeRobot export and CPU batch do not establish pi05 preprocessing or backward readiness"
+  ],
+  "recording_revision_aliases": {
+    "local-revision-002": 14,
+    "local-revision-003": 6
+  },
+  "revision_alias_note": "Public source revision labels refer to preserved local audit metadata; exact original revisions and migration mappings remain local."
+}

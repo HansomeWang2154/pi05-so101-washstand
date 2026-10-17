@@ -13,3 +13,5 @@ Git 中保留 `runtime-versions.json` 主要版本摘要及 `bootstrap-summary.j
 包版本可读取、CLI可导入、GPU可用、模型可加载、硬件可执行是不同验收项。当前仅前两项及小范围PyAV读写通过，实际GPU/模型/硬件另测。
 
 后续详细运行报告优先放在 `outputs/`；将必要版本与验收结论检查后归档。版本管理约定见 [Git 版本管理](../docs/Git版本管理.md)。
+
+2026-10-17新增 [仿真原型v1验收摘要](simulation-v1-summary.json)：主要依赖、资产与录制/校验版本、20条实际数据的检查结果和本地证据哈希。完整raw/LeRobot/视频/校验报告仍在忽略的data与outputs中；该摘要不代表GPU、π₀.₅或真实SO101已验收。
