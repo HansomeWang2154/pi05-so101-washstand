@@ -23,7 +23,13 @@
     },
     "G0": {
       "status": "pending",
-      "description": "硬件、环境、数据契约实际验证"
+      "description": "硬件、环境、数据契约实际验证",
+      "calibration_user_report": "2026-10-17用户确认两臂由卖家预先校准；需取得对应JSON、原id和运行版本，本会话未验证加载和运动对应",
+      "operation_guide": "docs/已标定双臂遥操作与试采.md",
+      "preparation_verified": [
+        "当前LeRobot遥操作、SO101类型参数和录制模块CLI帮助返回0",
+        "只读核对原标定复用、续录及键盘保存/丢弃语义；未启动设备"
+      ]
     },
     "G1": {
       "status": "pending",
@@ -83,6 +89,7 @@
     "rental RTX4090"
   ],
   "next_actions": [
+    "复用用户已有标定：确认原两个id、对应校准文件目录及当前环境加载",
     "确认实际串口与top/wrist相机编号",
     "验证相机画面和校准",
     "做人工遥操作可行性检查",
@@ -106,10 +113,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "用户准备新建；本轮未创建、未派发或核验对话ID",
+    "real_conversation_status": "用户已在当前对话指定真机/采集职责；完成操作指南与CLI核对，未启动设备",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "documentation_only; no hardware, recording, cloud or training started",
+    "last_update_scope": "real_operation_documentation_and_read_only_CLI_help; no hardware, recording, cloud or training started",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
@@ -124,7 +131,7 @@
     "planned_workstreams": {
       "planning_integration": "shared state and accepted change integration",
       "simulation": "prototype_v1_completed; alignment_pending",
-      "real_G0_G1": "pending_assignment_and_actual_verification",
+      "real_G0_G1": "assigned_to_current_real_conversation; preparation_only; actual_verification_pending",
       "training_preparation": "pending_assignment; local_preparation_can_parallelize",
       "training_G2": "waiting_for_G1_evidence",
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",
