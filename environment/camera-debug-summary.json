@@ -1,6 +1,6 @@
 {
   "date": "2026-10-17",
-  "scope": "G0 USB camera debugging only; no robot connection or motor commands by agent",
+  "scope": "G0 USB camera and saved-image viewer debugging; no agent robot connection or motor commands",
   "issue": "ISSUE-018",
   "user_reported_teleoperation": "without cameras succeeded; pasted log includes follower disconnect at 16:24:44",
   "camera_roles": {
@@ -8,7 +8,10 @@
     "wrist": "user confirmed discovered video4"
   },
   "camera_settings": {
-    "resolution": [640, 480],
+    "resolution": [
+      640,
+      480
+    ],
     "requested_fps": 30,
     "backend": "V4L2 (200)",
     "top_actual_fourcc": "YUYV",
@@ -47,16 +50,59 @@
     "existing_packages_removed": {},
     "two_image_logging_and_rrd_write": "passed",
     "native_binary_version_command_exit_code": 0,
-    "live_viewer_window": "not verified"
+    "live_viewer_window": "Saved real images + synthetic scalar streaming: target30Hz, 300 sends, total11.00s including final wait, two responsive screenshots; no live cameras or robot",
+    "compressed_image_issue": {
+      "issue": "ISSUE-020",
+      "report": "docs/Rerun无响应调试报告_2026-10-17.md",
+      "minimal_comparison": "same 64x64 dual image blueprint: raw screenshot in 2.82s; JPEG-compressed display timed out at 12s",
+      "real_saved_images_raw_default_desktop": "640x480 dual images visible in 4.37s",
+      "continuous_display_test": "target30Hz, 300 sends of saved images and synthetic scalar values; total elapsed11.00275s including final wait; worker exit0, viewer screenshots after sends120/240; viewer alive until test cleanup",
+      "automatic_screenshot_exit": "PNG generated then independent store-hub panic, exit102; not a clean exit; ordinary live screenshot API test had no such panic",
+      "workaround": "local launcher display_compressed_images=false; camera YUYV/MJPG unchanged",
+      "root_cause_scope": "compressed image path trigger isolated; underlying blocking function unknown",
+      "real_teleoperation_after_workaround": "not tested yet",
+      "evidence_root": "outputs/real/real_20261017_165353_rerun_freeze/"
+    }
   },
   "calibration_files": "Both expected files exist with six joint entries; hashes archived locally. This is not a new physical direction/range validation.",
+  "later_combined_run": {
+    "start_time_local": "2026-10-17 16:42:51",
+    "devices_connected": [
+      "leader",
+      "top",
+      "wrist",
+      "follower"
+    ],
+    "control_cadence_hz": 29.92,
+    "measured_run_s": 14.7,
+    "usb_disconnect_time_local": "2026-10-17 16:43:08",
+    "primary_cause": "User confirmed follower motion pulled wrist camera cable loose; kernel USB disconnect and missing wrist node corroborate",
+    "reconnect_time_local": "2026-10-17 16:45:30",
+    "user_reported_supported_arm_and_reconnected_camera": true,
+    "cleanup_failure": "Torque disable device error on motor id4 interrupted remaining serial/camera cleanup; ISSUE-019",
+    "motor_error_root_cause": "unknown; do not infer motor damage or timeout from mixed log",
+    "post_reconnect_one_minute_camera_test": "not completed: camera open failed and subsequent inspection found a new user control process owning cameras and serial ports",
+    "launcher_guard": "Known device character/read/write metadata check added; check-only branch validated, no robot runtime started by agent",
+    "evidence_root": "outputs/real/real_20261017_164251_camera_disconnect_failure/",
+    "later_user_report": "After reconnect teleoperation follows normally, Rerun system dialog reports application not responding; control and viewer later observed exited before isolated display testing"
+  },
   "remaining": [
+    "wrist cable strain relief and motion-range routing validation",
+    "independent exception-resilient cleanup of serial/camera resources; ISSUE-019",
     "camera mounting, unmirrored orientation, workspace coverage and wrist focus",
     "stable measured camera rates and exposure/USB investigation",
-    "combined camera + robot + viewer teleoperation in user terminal",
+    "combined camera + robot + raw-image viewer retest in user terminal; underlying JPEG-path cause unresolved",
     "measured six-dimensional action and timing contract",
     "G1 real pilot recording and full QA"
   ],
   "evidence_root": "outputs/real/real_20261017_162848_camera_debug/",
-  "report": "docs/双相机遥操作调试记录_2026-10-17.md"
+  "report": "docs/双相机遥操作调试记录_2026-10-17.md",
+  "latest_device_metadata_check": {
+    "local_time": "2026-10-17 17:03:55",
+    "known_serial_and_usb_camera_nodes_present": false,
+    "launcher_metadata_guard": "refused before robot startup on missing device",
+    "type_parse": "passed; raw display false compression flag and original YUYV/MJPG confirmed",
+    "hardware_opened": false,
+    "next": "reconnect and verify device identity, paths and permissions before real retest"
+  }
 }

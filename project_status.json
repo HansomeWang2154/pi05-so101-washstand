@@ -28,7 +28,7 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "用户报告无视觉遥操作成功并提供16:24:44断开片段；相机角色已确认，双路取帧成功但实际12.49/19.98Hz，完整带相机GUI遥操作待用户测试",
+      "latest_user_attempt": "16:42四设备运行14.7秒/29.92Hz后拉脱腕相机线；重接后用户确认跟随正常但Rerun无响应；JPEG显示路径最小对照已定位，关闭显示压缩的300次回放绕过通过（目标30Hz，总耗时11.00秒含结束等待），修改后实机待重试；17:03:55四设备节点不可见，预检阻止启动，待现场重接核对",
       "camera_debug_evidence": "environment/camera-debug-summary.json",
       "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
@@ -38,8 +38,11 @@
         "SDK/pyserial/deepdiff已补齐，导入和未连接通信对象构造通过；没有原有包变更或删除",
         "主机只读元数据确认串口节点及稳定别名存在；用户已加入dialout，两节点用户rw ACL有效、当前会话读写access均true；agent未打开串口",
         "用户16:15:57日志确认leader连接后进入校准；后续用户报告遥操作成功，两份对应校准文件已归档",
-        "用户确认top/wrist身份；相机独占短测可取帧，实测帧率低于请求值；Rerun依赖与双图片记录通过，未启动完整GUI/机械臂联调"
-      ]
+        "用户确认top/wrist身份；相机独占短测可取帧，实测帧率低于请求值；Rerun依赖与双图片记录通过",
+        "用户带相机日志确认四设备连接和14.7秒控制循环；腕相机物理断连与内核记录吻合，走线及异常收尾仍待验",
+        "Rerun JPEG显示路径最小对照可触发卡住；关闭显示压缩的保存真实双图和目标30Hz/300次回放（总耗时11.00秒含结束等待），两次窗口截图响应通过；不是真实相机帧率或机械臂运行验证"
+      ],
+      "rerun_debug_report": "docs/Rerun无响应调试报告_2026-10-17.md"
     },
     "G1": {
       "status": "pending",
@@ -99,7 +102,10 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "用户用已生成候选脚本测试带相机遥操作和GUI；先确认设备独占、相机去盖/对焦与两臂安全姿态",
+    "最新检查四设备节点不可见；现场重新连接后核对已知身份、路径与读写权限，不直接假定编号不变",
+    "先检查腕相机线材/连接器，设置腕部/臂身/底座应力释放和活动余量，再验证完整运动路径不拉线",
+    "用户先支稳退出控制并关闭旧无响应viewer，再用关闭显示压缩的更新脚本小幅重试；设备占用时不独立取帧，之后再安排相机稳定复测",
+    "处理ISSUE-019异常资源清理缺陷，保留关力矩失败证据，不能以关闭力矩释放功能掩盖",
     "继续排查双路新帧率低于30Hz并冻结稳定图像/控制设置，再完成六维与时序契约",
     "复用已保存的两臂标定，完成六关节实际方向/范围、夹爪及任务完整路径核验；不主动重复标定",
     "锁定top/wrist安装方向、未镜像画面和稳定路径，补齐场景尺寸证据",
@@ -123,10 +129,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "用户报告无视觉遥操作成功；agent完成双相机取帧和显示依赖准备，未连接机械臂，完整带相机联调和频率验收待执行",
+    "real_conversation_status": "重接后用户确认跟随正常、Rerun无响应；已用保存图片定位JPEG显示触发条件并验证原始显示绕过；修改后真实重试待用户现场执行，agent未连接机械臂",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "exclusive USB camera tests, temporary exposure contrast with restored controls, Rerun installation and offline visualization check; no agent serial connection or motor commands",
+    "last_update_scope": "physical cable pull/reconnect and teardown audit, launcher device metadata guard; saved-image Rerun compressed/raw comparison and responsive streaming test; no agent hardware control or external framework changes",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
@@ -141,7 +147,7 @@
     "planned_workstreams": {
       "planning_integration": "shared state and accepted change integration",
       "simulation": "prototype_v1_completed; alignment_pending",
-      "real_G0_G1": "G0_user_reported_teleoperation_and_camera_capture_prepared; measured_camera_rates_below_target_and_contract_pending; G1_not_started",
+      "real_G0_G1": "G0_raw_display_workaround_verified_offline; real_retest_routing_cleanup_rates_contract_pending; G1_not_started",
       "training_preparation": "pending_assignment; local_preparation_can_parallelize",
       "training_G2": "waiting_for_G1_evidence",
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",
