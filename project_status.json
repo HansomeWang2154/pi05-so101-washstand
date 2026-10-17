@@ -28,12 +28,14 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "2026-10-17遥操作启动在设备连接前因缺少SDK失败；同conda环境依赖已修复，待现场30Hz重试",
+      "latest_user_attempt": "2026-10-17 16:08主臂打开errno13；16:13确认用户已入dialout但旧会话未刷新，ACL命令漏:rw失败，待用户补执行；当前节点读写仍false",
+      "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
         "当前LeRobot遥操作、SO101类型参数和录制模块CLI帮助返回0",
         "只读核对原标定复用、续录及键盘保存/丢弃语义；未启动设备",
         "当前主臂和从臂校准CLI帮助均返回0；已核对中间姿态、五关节范围及保存流程，未实际校准",
-        "SDK/pyserial/deepdiff已补齐，导入和未连接通信对象构造通过；没有原有包变更或删除"
+        "SDK/pyserial/deepdiff已补齐，导入和未连接通信对象构造通过；没有原有包变更或删除",
+        "主机只读元数据确认串口节点及稳定别名存在；errno13由账户组/ACL未授权引起，未打开串口，sudo修复待用户执行"
       ]
     },
     "G1": {
@@ -94,6 +96,7 @@
     "rental RTX4090"
   ],
   "next_actions": [
+    "用户已加入dialout，需补执行完整节点ACL命令（前次漏:rw失败），复核当前会话读写权限后再现场重试",
     "按用户最新决定，在实际采集终端确认端口后逐臂校准，保留生成文件及版本，再验证小幅跟随",
     "确认实际串口与top/wrist相机编号",
     "验证相机画面和校准",
@@ -118,10 +121,10 @@
     "workflow_doc": "docs/跨对话协作约定.md",
     "real_session_template": "templates/real_session.md",
     "real_conversation_created_by_this_task": false,
-    "real_conversation_status": "当前真机对话已修复用户启动报错的通信依赖；用户现场重试待执行，agent未连接设备",
+    "real_conversation_status": "通信依赖已修复；权限根因已确认，用户追加dialout已验证，旧会话仍待完整ACL授权；agent未打开设备",
     "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
     "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
-    "last_update_scope": "serial installation of missing hardware dependencies in existing conda; user-reported pre-connection failure recorded; no agent device connection or recording",
+    "last_update_scope": "host read-only serial metadata/group/ACL diagnosis and report; user group addition verified, malformed user ACL command corrected and awaiting retry; no agent admin mutation, serial open or motor commands",
     "training_handoff_doc": "docs/项目记忆与模型训练交接.md",
     "training_experiment_template": "templates/experiment.md",
     "role_handoffs": {
@@ -136,7 +139,7 @@
     "planned_workstreams": {
       "planning_integration": "shared state and accepted change integration",
       "simulation": "prototype_v1_completed; alignment_pending",
-      "real_G0_G1": "G0_dependency_repair_verified; real_device_retry_pending; G1_not_started",
+      "real_G0_G1": "G0_serial_permission_root_cause_confirmed; user_sudo_repair_pending; no_serial_open; G1_not_started",
       "training_preparation": "pending_assignment; local_preparation_can_parallelize",
       "training_G2": "waiting_for_G1_evidence",
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",
