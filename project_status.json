@@ -28,14 +28,15 @@
       "calibration_guide": "docs/SO101本机校准操作.md",
       "operation_guide": "docs/已标定双臂遥操作与试采.md",
       "hardware_dependency_evidence": "environment/real-hardware-dependency-summary.json",
-      "latest_user_attempt": "2026-10-17 16:08主臂打开errno13；用户追加dialout并修正ACL命令后，16:15:01两节点用户rw ACL和当前会话读写条件复核通过；实际握手/跟随待现场重试",
+      "latest_user_attempt": "2026-10-17 16:15:57用户重试已通过leader串口连接，自动进入washstand_leader校准，等待居中后Enter；校准保存、follower和跟随仍未验证",
       "serial_permission_report": "docs/真机串口权限调试报告_2026-10-17.md",
       "preparation_verified": [
         "当前LeRobot遥操作、SO101类型参数和录制模块CLI帮助返回0",
         "只读核对原标定复用、续录及键盘保存/丢弃语义；未启动设备",
         "当前主臂和从臂校准CLI帮助均返回0；已核对中间姿态、五关节范围及保存流程，未实际校准",
         "SDK/pyserial/deepdiff已补齐，导入和未连接通信对象构造通过；没有原有包变更或删除",
-        "主机只读元数据确认串口节点及稳定别名存在；用户已加入dialout，两节点用户rw ACL有效、当前会话读写access均true；未打开串口"
+        "主机只读元数据确认串口节点及稳定别名存在；用户已加入dialout，两节点用户rw ACL有效、当前会话读写access均true；agent未打开串口",
+        "用户16:15:57日志确认leader连接后进入校准；仅到居中交互，尚无保存或遥操作完成证据"
       ]
     },
     "G1": {
@@ -96,7 +97,7 @@
     "rental RTX4090"
   ],
   "next_actions": [
-    "权限条件已复核通过，用户在现场确认设备独占/安全姿态后显式30Hz重试，按实际提示完成标定与跟随验收",
+    "用户当前进程已进入主臂校准，先完成居中/范围/保存，再按实际提示处理从臂；当前设备流程独占，不另启遥操作",
     "按用户最新决定，在实际采集终端确认端口后逐臂校准，保留生成文件及版本，再验证小幅跟随",
     "确认实际串口与top/wrist相机编号",
     "验证相机画面和校准",
