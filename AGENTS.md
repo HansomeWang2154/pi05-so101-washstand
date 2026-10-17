@@ -1,7 +1,9 @@
 # Project guidance
 
 - Goal: pi05_base → SO101 real demonstrations → expert-only fine-tuning → remote inference/local execution → honest real-robot evaluation.
-- Read README.md, docs/项目总体规划.md and docs/进度看板.md first. Keep existing plans and experiment evidence; do not overwrite unrelated older VLA projects.
+- Read docs/项目记忆与真机交接.md and docs/跨对话协作约定.md first, then README.md, docs/项目总体规划.md, docs/进度看板.md and the latest project_status.json. The handoff is a dated snapshot; do not roll back newer evidence to match it. Keep existing plans and experiment evidence; do not overwrite unrelated older VLA projects.
+- User split: the real-hardware/collection role owns hardware, teleoperation, real data collection/QA and direct robot execution; the simulation/offline role owns simulation and offline preparation. Determine the current role from the latest explicit user task; follow later user changes to the assignment. Do not repeat settled model/hardware questions or start hardware work from a simulation-only task. Coordinate shared contracts through measured evidence and the handoff documents.
+- Same-checkout writes, Git staging/branch operations, shared-environment changes and device access must be serialized. Check current ownership/status before mutations; use independent worktrees for actual parallel code edits. Preserve other conversations' work, and stage only the files belonging to the completed change.
 - Local preparation tools must run with the Python standard library. LeRobot is an external runtime; do not vendor model code or heavy weights here.
 - Keep machine-specific devices in ignored configs/local.json. Never guess serial/camera IDs or claim calibration/model/CUDA checks passed without evidence.
 - `plan` generates previews, not execution. Add real launch paths only in the corresponding implementation stage with environment validation.

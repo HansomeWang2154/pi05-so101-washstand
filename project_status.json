@@ -97,5 +97,17 @@
     "pi05 checkpoint loading",
     "training",
     "real-world success"
-  ]
+  ],
+  "collaboration": {
+    "updated_date": "2026-10-17",
+    "user_decision": "真实数据采集和直接实机事项交由用户另开的对话；原规划/仿真对话保留仿真/离线准备，角色以最新用户任务为准",
+    "memory_handoff_doc": "docs/项目记忆与真机交接.md",
+    "workflow_doc": "docs/跨对话协作约定.md",
+    "real_session_template": "templates/real_session.md",
+    "real_conversation_created_by_this_task": false,
+    "real_conversation_status": "用户准备新建；本轮未创建、未派发或核验对话ID",
+    "shared_checkout_default": "serial writes and Git operations; independent worktrees for parallel code edits",
+    "hardware_owner_role": "real_hardware_collection_conversation; actual device occupancy must be verified",
+    "last_update_scope": "documentation_only; no hardware, recording, cloud or training started"
+  }
 }
