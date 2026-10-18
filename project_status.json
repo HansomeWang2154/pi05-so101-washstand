@@ -188,7 +188,16 @@
     "local_context_location": ".private/project-context.md (optional local-only file)",
     "private_storage_ignored": true,
     "complete_history_check_required_before_push": true,
-    "remote_history_maintenance": "pending_review; local preparation does not confirm remote removal"
+    "remote_history_maintenance": "completed; remote main replaced with an exact expected-head lease and independently recloned",
+    "remote_history_verified_date": "2026-10-18",
+    "rewritten_history_head": "a5d83a5ac631733e3d4c29dd339072acd4e511e9",
+    "remote_reclone_audit": {
+      "reachable_commits": 24,
+      "findings": 0,
+      "latest_tree_preserved": true,
+      "scope": "published main ancestry; external copies and platform caches are outside this verification"
+    },
+    "original_history_backup": "local-only ignored storage; never publish backup refs"
   },
   "real_dataset_upload": {
     "date": "2026-10-18",
