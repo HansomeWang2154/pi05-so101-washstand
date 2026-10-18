@@ -189,5 +189,27 @@
     "private_storage_ignored": true,
     "complete_history_check_required_before_push": true,
     "remote_history_maintenance": "pending_review; local preparation does not confirm remote removal"
+  },
+  "real_dataset_upload": {
+    "date": "2026-10-18",
+    "status": "completed",
+    "visibility": "private",
+    "datasets": [
+      {
+        "name": "red_left_trial01",
+        "episodes": 60,
+        "frames": 32475,
+        "verified_files": 11
+      },
+      {
+        "name": "blue_right_trial01",
+        "episodes": 35,
+        "frames": 17410,
+        "verified_files": 7
+      }
+    ],
+    "qa_status": "pending; raw demonstrations may contain failures and recovery",
+    "verification": "Remote file sizes and available LFS SHA256 checked against local snapshot",
+    "local_evidence": "outputs/real/hf_upload_20261018/results.local.json"
   }
 }
