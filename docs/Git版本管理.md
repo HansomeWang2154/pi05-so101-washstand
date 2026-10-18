@@ -1,5 +1,7 @@
 # Git 版本管理
 
+公开内容边界和完整历史检查见[发布规则](公开内容与本地记录边界.md)。`.private/`内原始文档、Git bundle和修订映射仅作本地审计，不提交、不推送；普通提交前执行`make privacy-check`，发布前执行`make privacy-history-check`。
+
 更新：2026-10-17。项目使用独立仓库，仓库根目录为 `pi05-so101-washstand/`，默认分支 `main`，跟踪 `origin/main`。公开远程仓库为 [HansomeWang2154/pi05-so101-washstand](https://github.com/HansomeWang2154/pi05-so101-washstand)。
 
 ## 跟踪范围

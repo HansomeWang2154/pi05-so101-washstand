@@ -1,10 +1,16 @@
 PYTHON ?= .venv/bin/python
 
-.PHONY: check test doctor plan status sim-test sim-generate
+.PHONY: check test doctor plan status sim-test sim-generate privacy-check privacy-history-check install-hooks
 check:
 	$(PYTHON) scripts/project.py validate-config
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
+privacy-check:
+	python3 scripts/check_public.py --index
+privacy-history-check:
+	python3 scripts/check_public.py --history HEAD
+install-hooks:
+	git config --local core.hooksPath .githooks
 doctor:
 	$(PYTHON) scripts/project.py doctor --gpu
 plan:

@@ -181,5 +181,13 @@
       "training_G4": "waiting_for_G3_freeze_and_G2_measurements",
       "real_deployment_evaluation": "waiting_for_validated_model_and_interface"
     }
+  },
+  "publication": {
+    "policy_doc": "docs/公开内容与本地记录边界.md",
+    "tracked_content_scope": "technical project information only",
+    "local_context_location": ".private/project-context.md (optional local-only file)",
+    "private_storage_ignored": true,
+    "complete_history_check_required_before_push": true,
+    "remote_history_maintenance": "pending_review; local preparation does not confirm remote removal"
   }
 }

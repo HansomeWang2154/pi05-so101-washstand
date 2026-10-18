@@ -1,4 +1,5 @@
 # 本机配置与凭据
+.private/
 .env
 .env.*
 !.env.example

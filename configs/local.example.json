@@ -1,4 +1,5 @@
 {
+  "runtime": {"lerobot_source": null},
   "robot": {"port": null, "leader_port": null},
   "cameras": {
     "top": {"index_or_path": null},
